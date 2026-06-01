@@ -604,7 +604,7 @@ let priceChart = null;
 const isPos = v => v >= 0;
 const fmtChg = (v, pct) => {
   const sign = v >= 0 ? '▲ +' : '▼ ';
-  return `${sign}${Math.abs(v).toFixed(2)} (${v >= 0 ? '+' : ''}${pct.toFixed(2)}%)`;
+  return `${sign}${Math.abs(v).toFixed(2)} (${v >= 0 ? '+' : ''}${pct != null ? pct.toFixed(2) : '--'}%)`;
 };
 const fmtNum = (v, dec=2) => v == null ? '--' : parseFloat(v).toFixed(dec);
 const colorOf = v => v == null ? '' : v >= 0 ? 'c-green' : 'c-red';
@@ -646,7 +646,7 @@ function renderMarket(market) {
       <div class="mcard-accent" style="background:var(${cfg.color})"></div>
       <div class="mcard-label">${cfg.label}</div>
       <div class="mcard-val ${chgClass}">${d.price.toLocaleString('en', {maximumFractionDigits:2})}</div>
-      <div class="mcard-chg ${chgClass}">${sign}${Math.abs(d.change).toFixed(2)} (${d.changePct.toFixed(2)}%)</div>
+      <div class="mcard-chg ${chgClass}">${sign}${Math.abs(d.change).toFixed(2)} (${d.changePct != null ? d.changePct.toFixed(2) : '--'}%)</div>
       ${vixNote?`<div class="mcard-sub">${vixNote}</div>`:''}
     </div>`;
   }).join('');
