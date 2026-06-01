@@ -1,0 +1,45 @@
+name: 每日股票資料更新
+
+on:
+  schedule:
+    # 台灣時間 17:30（UTC 09:30）收盤後自動更新，週一到週五
+    - cron: '30 9 * * 1-5'
+    # 台灣時間 09:00（UTC 01:00）開盤前預熱
+    - cron: '0 1 * * 1-5'
+  workflow_dispatch:  # 允許手動觸發
+    inputs:
+      symbols:
+        description: '股票代號（逗號分隔，例如 6467,2401,TSLA）'
+        required: false
+        default: ''
+
+jobs:
+  update-stock-data:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install axios
+
+      - name: Fetch stock data
+        env:
+          SYMBOLS: ${{ github.event.inputs.symbols || '6467,2401,TSLA' }}
+        run: node scripts/fetch-data.js
+
+      - name: Commit and push data
+        run: |
+          git config user.name  "Stock Monitor Bot"
+          git config user.email "bot@stock-monitor.local"
+          git add data/stocks.json
+          git diff --staged --quiet || git commit -m "📊 自動更新股票資料 $(date '+%Y-%m-%d %H:%M') UTC"
+          git push

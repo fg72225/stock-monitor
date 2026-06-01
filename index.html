@@ -1,0 +1,1400 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>股票進出場監控系統</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --bg0: #070b14; --bg1: #0d1220; --bg2: #111827; --bg3: #161e2e;
+  --border: rgba(255,255,255,0.06); --border2: rgba(255,255,255,0.11);
+  --t1: #e2e8f0; --t2: #8892a8; --t3: #454e63;
+  --green: #10d07a; --red: #f04f5f; --yellow: #f5c842;
+  --blue: #3d9bff; --purple: #9b7ef8; --orange: #ff9f43; --teal: #00cec9;
+  --green-d: rgba(16,208,122,0.12); --red-d: rgba(240,79,95,0.12);
+  --yellow-d: rgba(245,200,66,0.1); --blue-d: rgba(61,155,255,0.1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{font-size:13px}
+body{background:var(--bg0);color:var(--t1);font-family:'Noto Sans TC','SF Mono','Segoe UI',sans-serif;min-height:100vh;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+button{cursor:pointer;font-family:inherit;outline:none}
+
+/* ─ Layout ─ */
+.shell{max-width:1440px;margin:0 auto;padding:16px 20px}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;gap:12px}
+.logo{font-size:15px;font-weight:700;letter-spacing:.04em;display:flex;align-items:center;gap:8px}
+.logo-dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(16,208,122,.5)}70%{box-shadow:0 0 0 6px rgba(16,208,122,0)}}
+.topbar-right{display:flex;align-items:center;gap:10px}
+.time-chip{font-size:11px;color:var(--t3);padding:4px 10px;border:0.5px solid var(--border2);border-radius:20px;white-space:nowrap}
+.btn-sm{padding:5px 13px;border-radius:7px;border:0.5px solid var(--border2);background:transparent;color:var(--t2);font-size:11px;transition:all .15s;display:flex;align-items:center;gap:5px}
+.btn-sm:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-d)}
+.btn-sm.loading{color:var(--yellow);border-color:var(--yellow)}
+.spin{animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.status-bar{font-size:11px;color:var(--t3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:260px}
+
+/* ─ Market row ─ */
+.market-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+@media(max-width:700px){.market-grid{grid-template-columns:repeat(2,1fr)}}
+.mcard{background:var(--bg2);border:0.5px solid var(--border2);border-radius:10px;padding:13px 15px;position:relative;overflow:hidden;transition:border-color .2s}
+.mcard:hover{border-color:rgba(255,255,255,.18)}
+.mcard-accent{position:absolute;top:0;left:0;right:0;height:2px;border-radius:10px 10px 0 0}
+.mcard-label{font-size:10px;color:var(--t3);letter-spacing:.08em;margin-bottom:7px}
+.mcard-val{font-size:19px;font-weight:700;letter-spacing:-.02em;margin-bottom:3px}
+.mcard-chg{font-size:11px}
+.mcard-sub{font-size:9px;color:var(--t3);margin-top:4px}
+
+/* ─ Stock tabs ─ */
+.stock-tabs{display:flex;gap:5px;margin-bottom:10px;flex-wrap:wrap}
+.stab{padding:6px 14px;border-radius:8px;font-size:12px;border:0.5px solid var(--border2);color:var(--t2);background:transparent;transition:all .15s}
+.stab:hover{border-color:var(--blue);color:var(--blue)}
+.stab.active{background:var(--blue-d);border-color:var(--blue);color:var(--blue);font-weight:600}
+.stab-add{border-style:dashed}
+
+/* ─ Main content grid ─ */
+.main-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+@media(max-width:900px){.main-grid{grid-template-columns:1fr}}
+
+/* ─ Panel ─ */
+.panel{background:var(--bg2);border:0.5px solid var(--border);border-radius:11px;padding:15px}
+.panel-title{font-size:10px;letter-spacing:.12em;color:var(--t3);text-transform:uppercase;margin-bottom:13px;display:flex;align-items:center;gap:6px}
+.panel-title svg{opacity:.6}
+
+/* ─ Price header ─ */
+.price-header{display:flex;align-items:baseline;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.price-big{font-size:26px;font-weight:800;letter-spacing:-.03em}
+.price-chg{font-size:13px;font-weight:600}
+.vol-ratio-badge{margin-left:auto;font-size:12px;font-weight:600;padding:3px 9px;border-radius:5px;background:var(--bg3)}
+
+/* ─ Indicator grid ─ */
+.ind-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ind-card{background:var(--bg3);border:0.5px solid var(--border);border-radius:9px;padding:11px 12px}
+.ind-label{font-size:10px;color:var(--t3);letter-spacing:.06em;margin-bottom:8px}
+.ind-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.ind-key{font-size:11px;color:var(--t2)}
+.ind-val{font-size:12px;font-weight:700}
+
+/* ─ Signal badges ─ */
+.sig{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:.03em}
+.sig-buy{background:rgba(16,208,122,.14);color:var(--green);border:0.5px solid rgba(16,208,122,.3)}
+.sig-sell{background:var(--red-d);color:var(--red);border:0.5px solid rgba(240,79,95,.3)}
+.sig-watch{background:var(--yellow-d);color:var(--yellow);border:0.5px solid rgba(245,200,66,.3)}
+.sig-hold{background:rgba(136,146,168,.08);color:var(--t2);border:0.5px solid var(--border2)}
+
+/* ─ Gauge ─ */
+.gauge-wrap{margin-top:9px}
+.gauge-bar{width:100%;height:5px;background:var(--bg0);border-radius:3px;overflow:hidden;margin:5px 0}
+.gauge-fill{height:100%;border-radius:3px;transition:width .5s ease}
+.gauge-labels{display:flex;justify-content:space-between;font-size:9px;color:var(--t3)}
+
+/* ─ MA section ─ */
+.ma-row{display:flex;align-items:center;gap:7px;margin-bottom:6px}
+.ma-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.ma-name{font-size:10px;color:var(--t3);width:36px}
+.ma-val{font-size:12px;flex:1}
+.ma-trend{font-size:10px;font-weight:700;width:30px;text-align:right}
+
+/* ─ AI Score ─ */
+.score-wrap{display:flex;align-items:center;gap:14px}
+.score-ring{position:relative;width:78px;height:78px;flex-shrink:0}
+.score-ring svg{transform:rotate(-90deg)}
+.score-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
+.score-num{font-size:22px;font-weight:800;line-height:1}
+.score-label{font-size:9px;color:var(--t3);margin-top:1px}
+.chips{display:flex;flex-wrap:wrap;gap:4px;margin-top:7px}
+.chip{padding:2px 8px;border-radius:4px;font-size:10px}
+.chip-buy{background:rgba(16,208,122,.1);color:var(--green)}
+.chip-sell{background:var(--red-d);color:var(--red)}
+.chip-neutral{background:rgba(136,146,168,.07);color:var(--t2)}
+
+/* ─ Fund flow ─ */
+.fund-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.fund-name{font-size:11px;color:var(--t2);width:40px;flex-shrink:0}
+.fund-track{flex:1;height:6px;background:var(--bg0);border-radius:3px;position:relative;overflow:visible}
+.fund-mid{position:absolute;left:50%;top:-2px;bottom:-2px;width:1px;background:var(--border2)}
+.fund-bar-pos{position:absolute;height:100%;right:50%;border-radius:2px 0 0 2px}
+.fund-bar-neg{position:absolute;height:100%;left:50%;border-radius:0 2px 2px 0}
+.fund-val{font-size:11px;font-weight:700;width:54px;text-align:right;flex-shrink:0}
+.fund-days{font-size:10px;color:var(--t3);width:44px;text-align:right;flex-shrink:0}
+
+/* ─ Risk panel ─ */
+.risk-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.risk-label{font-size:11px;color:var(--t2);width:64px;flex-shrink:0}
+.risk-track{flex:1;height:5px;background:var(--bg0);border-radius:3px;overflow:hidden}
+.risk-fill{height:100%;border-radius:3px;transition:width .5s}
+.risk-val{font-size:11px;font-weight:700;width:44px;text-align:right;flex-shrink:0}
+.mini-stat-row{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px}
+.mini-stat{background:var(--bg3);border-radius:7px;padding:8px 11px;display:flex;justify-content:space-between;align-items:center}
+.mini-stat-l{font-size:10px;color:var(--t3)}
+.mini-stat-r{font-size:12px;font-weight:700}
+
+/* ─ Alert list ─ */
+.alert-list{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+.alert-item{display:flex;align-items:flex-start;gap:9px;padding:9px 12px;border-radius:8px;transition:opacity .15s;cursor:default}
+.alert-item:hover{opacity:.8}
+.alert-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:3px}
+.alert-body{flex:1}
+.alert-title{font-size:11px;font-weight:700;margin-bottom:2px}
+.alert-desc{font-size:10px;color:var(--t2)}
+.alert-time{font-size:10px;color:var(--t3);flex-shrink:0;white-space:nowrap}
+.a-buy{background:rgba(16,208,122,.06);border:0.5px solid rgba(16,208,122,.2)}
+.a-buy .alert-dot{background:var(--green)}
+.a-buy .alert-title{color:var(--green)}
+.a-sell{background:var(--red-d);border:0.5px solid rgba(240,79,95,.2)}
+.a-sell .alert-dot{background:var(--red)}
+.a-sell .alert-title{color:var(--red)}
+.a-warn{background:var(--yellow-d);border:0.5px solid rgba(245,200,66,.2)}
+.a-warn .alert-dot{background:var(--yellow)}
+.a-warn .alert-title{color:var(--yellow)}
+.a-info{background:var(--blue-d);border:0.5px solid rgba(61,155,255,.2)}
+.a-info .alert-dot{background:var(--blue)}
+.a-info .alert-title{color:var(--blue)}
+
+/* ─ Bottom grid ─ */
+.bot-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+@media(max-width:900px){.bot-grid{grid-template-columns:1fr}}
+
+/* ─ Stock overview table ─ */
+.stock-table{width:100%;border-collapse:collapse;font-size:11px}
+.stock-table th{color:var(--t3);font-weight:500;padding:5px 8px;text-align:right;border-bottom:0.5px solid var(--border);font-size:10px;letter-spacing:.06em;text-transform:uppercase}
+.stock-table th:first-child{text-align:left}
+.stock-table td{padding:9px 8px;text-align:right;border-bottom:0.5px solid var(--border)}
+.stock-table td:first-child{text-align:left}
+.stock-table tr:last-child td{border-bottom:none}
+.stock-table tr:hover td{background:rgba(255,255,255,.02)}
+.sym{font-weight:700;color:var(--blue);font-size:12px}
+.sym-name{font-size:10px;color:var(--t3);margin-top:1px}
+
+/* ─ Checklist ─ */
+.check-row{display:flex;align-items:center;gap:7px;font-size:11px;margin-bottom:7px}
+.check-icon{font-size:14px;width:18px;text-align:center;flex-shrink:0}
+.check-label{color:var(--t1)}
+.check-label.muted{color:var(--t3)}
+.entry-result{margin-top:9px;padding:7px 10px;border-radius:7px}
+.btn-full{width:100%;padding:7px;border-radius:7px;border:0.5px solid rgba(61,155,255,.3);background:var(--blue-d);color:var(--blue);font-size:10px;margin-top:6px;transition:all .15s}
+.btn-full:hover{background:rgba(61,155,255,.2)}
+
+/* ─ Vol chart ─ */
+.vol-bars{display:flex;align-items:flex-end;gap:3px;height:42px;margin-top:10px;padding-bottom:16px;position:relative}
+.vol-b{flex:1;border-radius:2px 2px 0 0;position:relative;transition:height .4s}
+.vol-b span{position:absolute;bottom:-14px;left:50%;transform:translateX(-50%);font-size:8px;color:var(--t3);white-space:nowrap}
+
+/* ─ Loading overlay ─ */
+#loading-overlay{position:fixed;inset:0;background:var(--bg0);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;gap:16px;transition:opacity .4s}
+#loading-overlay.hidden{opacity:0;pointer-events:none}
+.loader-ring{width:44px;height:44px;border:3px solid var(--border2);border-top-color:var(--green);border-radius:50%;animation:spin .8s linear infinite}
+.loader-text{font-size:12px;color:var(--t2)}
+.loader-pct{font-size:22px;font-weight:800;color:var(--green)}
+
+/* ─ Toast ─ */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--bg2);border:0.5px solid var(--border2);border-radius:9px;padding:11px 16px;font-size:12px;color:var(--t1);transform:translateY(60px);opacity:0;transition:all .3s;z-index:9999;max-width:280px}
+.toast.show{transform:translateY(0);opacity:1}
+
+/* ─ Colors ─ */
+.c-green{color:var(--green)} .c-red{color:var(--red)} .c-yellow{color:var(--yellow)}
+.c-blue{color:var(--blue)} .c-t2{color:var(--t2)} .c-t3{color:var(--t3)}
+
+/* ─ Add stock modal ─ */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;z-index:900;opacity:0;pointer-events:none;transition:opacity .2s}
+.modal-bg.open{opacity:1;pointer-events:all}
+.modal{background:var(--bg2);border:0.5px solid var(--border2);border-radius:13px;padding:24px;width:320px}
+.modal h3{font-size:14px;margin-bottom:14px}
+.modal input{width:100%;padding:9px 12px;border-radius:8px;border:0.5px solid var(--border2);background:var(--bg3);color:var(--t1);font-size:13px;font-family:inherit;margin-bottom:12px}
+.modal input:focus{outline:none;border-color:var(--blue)}
+.modal-btns{display:flex;gap:8px;justify-content:flex-end}
+.modal-cancel{padding:7px 16px;border-radius:7px;border:0.5px solid var(--border2);background:transparent;color:var(--t2);font-size:12px}
+.modal-ok{padding:7px 16px;border-radius:7px;border:none;background:var(--blue);color:#fff;font-size:12px;font-weight:600}
+.modal-cancel:hover{color:var(--t1)} .modal-ok:hover{background:#5aadff}
+
+/* ─ Settings drawer ─ */
+.settings-drawer{position:fixed;top:0;right:0;bottom:0;width:420px;background:var(--bg1);border-left:0.5px solid var(--border2);z-index:800;transform:translateX(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);overflow-y:auto;padding:24px}
+.settings-drawer.open{transform:translateX(0)}
+.settings-scrim{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:799;opacity:0;pointer-events:none;transition:opacity .3s}
+.settings-scrim.open{opacity:1;pointer-events:all}
+.drawer-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+.drawer-title{font-size:15px;font-weight:700}
+.drawer-close{width:30px;height:30px;border-radius:8px;border:0.5px solid var(--border2);background:transparent;color:var(--t2);font-size:18px;display:flex;align-items:center;justify-content:center;line-height:1}
+.drawer-close:hover{color:var(--t1);border-color:var(--border2)}
+.drawer-section{margin-bottom:24px}
+.drawer-section-title{font-size:10px;letter-spacing:.12em;color:var(--t3);text-transform:uppercase;margin-bottom:12px;padding-bottom:6px;border-bottom:0.5px solid var(--border)}
+.sym-list{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
+.sym-item{display:flex;align-items:center;gap:8px;padding:9px 12px;background:var(--bg3);border:0.5px solid var(--border);border-radius:8px;transition:border-color .15s}
+.sym-item:hover{border-color:var(--border2)}
+.sym-item-code{font-size:13px;font-weight:700;color:var(--blue);width:52px;flex-shrink:0}
+.sym-item-name{font-size:11px;color:var(--t2);flex:1}
+.sym-item-price{font-size:12px;font-weight:600;width:52px;text-align:right;flex-shrink:0}
+.sym-item-del{width:24px;height:24px;border-radius:6px;border:0.5px solid transparent;background:transparent;color:var(--t3);font-size:14px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.sym-item-del:hover{border-color:rgba(240,79,95,.3);color:var(--red);background:var(--red-d)}
+.add-sym-row{display:flex;gap:6px}
+.add-sym-input{flex:1;padding:8px 11px;border-radius:8px;border:0.5px solid var(--border2);background:var(--bg3);color:var(--t1);font-size:12px;font-family:inherit}
+.add-sym-input:focus{outline:none;border-color:var(--blue)}
+.add-sym-input::placeholder{color:var(--t3)}
+.add-sym-btn{padding:8px 14px;border-radius:8px;border:none;background:var(--blue);color:#fff;font-size:12px;font-weight:600;white-space:nowrap}
+.add-sym-btn:hover{background:#5aadff}
+.setting-field{margin-bottom:12px}
+.setting-label{font-size:11px;color:var(--t2);margin-bottom:5px;display:flex;align-items:center;gap:5px}
+.setting-hint{font-size:10px;color:var(--t3);margin-top:4px}
+.setting-input{width:100%;padding:8px 11px;border-radius:8px;border:0.5px solid var(--border2);background:var(--bg3);color:var(--t1);font-size:12px;font-family:'SF Mono',monospace}
+.setting-input:focus{outline:none;border-color:var(--blue)}
+.setting-input[type=password]{letter-spacing:.1em}
+.setting-select{width:100%;padding:8px 11px;border-radius:8px;border:0.5px solid var(--border2);background:var(--bg3);color:var(--t1);font-size:12px;font-family:inherit;appearance:none}
+.setting-select:focus{outline:none;border-color:var(--blue)}
+.save-btn{width:100%;padding:10px;border-radius:8px;border:none;background:var(--green);color:#000;font-size:13px;font-weight:700;margin-top:6px;transition:opacity .15s}
+.save-btn:hover{opacity:.85}
+.save-btn:disabled{opacity:.4;cursor:not-allowed}
+.sync-btn{width:100%;padding:9px;border-radius:8px;border:0.5px solid rgba(16,208,122,.3);background:var(--green-d);color:var(--green);font-size:12px;font-weight:600;margin-top:8px;transition:all .15s}
+.sync-btn:hover{background:rgba(16,208,122,.2)}
+.sync-btn:disabled{opacity:.4;cursor:not-allowed}
+.tag-row{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}
+.preset-tag{padding:4px 10px;border-radius:5px;border:0.5px solid var(--border2);background:transparent;color:var(--t2);font-size:11px;cursor:pointer;transition:all .15s}
+.preset-tag:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-d)}
+.status-pill{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:10px;font-weight:600}
+.pill-ok{background:rgba(16,208,122,.1);color:var(--green);border:0.5px solid rgba(16,208,122,.3)}
+.pill-warn{background:var(--yellow-d);color:var(--yellow);border:0.5px solid rgba(245,200,66,.3)}
+.pill-err{background:var(--red-d);color:var(--red);border:0.5px solid rgba(240,79,95,.3)}
+.token-toggle{background:transparent;border:none;color:var(--t3);font-size:11px;padding:0;cursor:pointer}
+.token-toggle:hover{color:var(--t2)}
+.action-log{background:var(--bg3);border-radius:7px;padding:10px 12px;font-size:10px;color:var(--t2);font-family:'SF Mono',monospace;max-height:120px;overflow-y:auto;border:0.5px solid var(--border);line-height:1.7}
+</style>
+</head>
+<body>
+
+<!-- Loading overlay -->
+<div id="loading-overlay">
+  <div class="loader-ring"></div>
+  <div class="loader-pct" id="load-pct">0%</div>
+  <div class="loader-text" id="load-msg">初始化系統...</div>
+</div>
+
+<!-- Settings scrim -->
+<div class="settings-scrim" id="settings-scrim" onclick="closeSettings()"></div>
+
+<!-- Settings drawer -->
+<div class="settings-drawer" id="settings-drawer">
+  <div class="drawer-header">
+    <div class="drawer-title">⚙ 系統設定</div>
+    <button class="drawer-close" onclick="closeSettings()">✕</button>
+  </div>
+
+  <!-- Stock list management -->
+  <div class="drawer-section">
+    <div class="drawer-section-title">監控股票清單</div>
+    <div class="sym-list" id="sym-list"></div>
+    <div class="add-sym-row">
+      <input class="add-sym-input" id="add-sym-input" placeholder="輸入代號，如 2330 或 NVDA" maxlength="10"
+        onkeydown="if(event.key==='Enter')addSymFromDrawer()">
+      <button class="add-sym-btn" onclick="addSymFromDrawer()">＋ 新增</button>
+    </div>
+    <div style="margin-top:10px">
+      <div style="font-size:10px;color:var(--t3);margin-bottom:6px">熱門標的快速新增</div>
+      <div class="tag-row" id="preset-tags"></div>
+    </div>
+  </div>
+
+  <!-- GitHub Actions sync -->
+  <div class="drawer-section">
+    <div class="drawer-section-title">GitHub Actions 自動排程設定</div>
+    <div style="font-size:11px;color:var(--t2);margin-bottom:12px;line-height:1.6">
+      填入後可直接從這裡更新 GitHub Actions 的股票清單，不需進入 GitHub 網頁修改程式碼。
+    </div>
+
+    <div class="setting-field">
+      <div class="setting-label">
+        GitHub 帳號名稱
+      </div>
+      <input class="setting-input" id="gh-owner" placeholder="例如 fg72225" autocomplete="off">
+    </div>
+
+    <div class="setting-field">
+      <div class="setting-label">Repository 名稱</div>
+      <input class="setting-input" id="gh-repo" placeholder="例如 stock-monitor" autocomplete="off">
+    </div>
+
+    <div class="setting-field">
+      <div class="setting-label" style="justify-content:space-between">
+        <span>Personal Access Token（PAT）</span>
+        <button class="token-toggle" id="token-toggle-btn" onclick="toggleToken()">顯示</button>
+      </div>
+      <input class="setting-input" id="gh-token" type="password" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="new-password">
+      <div class="setting-hint">
+        到 GitHub → Settings → Developer settings → Personal access tokens → Fine-grained tokens<br>
+        權限需要：<strong style="color:var(--yellow)">Contents: Read and write</strong>（只需這一項）<br>
+        <span style="color:var(--t3)">Token 僅儲存於本機瀏覽器，不會上傳到任何伺服器</span>
+      </div>
+    </div>
+
+    <div class="setting-field">
+      <div class="setting-label">自動更新排程時間（台灣時間）</div>
+      <select class="setting-select" id="gh-cron">
+        <option value="30 9 * * 1-5">17:30 收盤後（預設）</option>
+        <option value="0 9 * * 1-5">17:00 收盤前</option>
+        <option value="30 7 * * 1-5">15:30 午盤後</option>
+        <option value="0 1 * * 1-5">09:00 開盤前</option>
+        <option value="30 9,1 * * 1-5">09:00 + 17:30 兩次</option>
+      </select>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px" id="gh-status-row" style="display:none">
+      <span id="gh-status-pill"></span>
+      <span id="gh-status-msg" style="font-size:11px;color:var(--t2)"></span>
+    </div>
+
+    <button class="save-btn" onclick="saveGitHubSettings()">儲存設定到本機</button>
+    <button class="sync-btn" id="sync-btn" onclick="syncToGitHub()">
+      ⇧ 同步股票清單 + 排程到 GitHub Actions
+    </button>
+
+    <div style="margin-top:10px;font-size:10px;color:var(--t3);display:none" id="sync-log-wrap">
+      <div style="margin-bottom:4px;color:var(--t3)">同步記錄</div>
+      <div class="action-log" id="sync-log"></div>
+    </div>
+  </div>
+
+  <!-- Display settings -->
+  <div class="drawer-section">
+    <div class="drawer-section-title">顯示設定</div>
+    <div class="setting-field">
+      <div class="setting-label">停損比例</div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <input class="setting-input" id="sl-pct" type="number" min="1" max="20" step="0.5" value="5" style="width:80px">
+        <span style="font-size:12px;color:var(--t2)">%</span>
+      </div>
+    </div>
+    <div class="setting-field">
+      <div class="setting-label">停利比例</div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <input class="setting-input" id="tp-pct" type="number" min="5" max="100" step="1" value="20" style="width:80px">
+        <span style="font-size:12px;color:var(--t2)">%</span>
+      </div>
+    </div>
+    <div class="setting-field">
+      <div class="setting-label">移動停利回檔比例</div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <input class="setting-input" id="mtp-pct" type="number" min="3" max="20" step="0.5" value="8" style="width:80px">
+        <span style="font-size:12px;color:var(--t2)">%</span>
+      </div>
+    </div>
+    <button class="save-btn" style="background:var(--blue);color:#fff" onclick="saveDisplaySettings()">套用顯示設定</button>
+  </div>
+
+  <div style="padding:12px 0;border-top:0.5px solid var(--border);margin-top:4px">
+    <button onclick="resetAll()" style="font-size:11px;color:var(--t3);background:transparent;border:none;padding:0;cursor:pointer">
+      ↺ 重設所有設定（恢復預設）
+    </button>
+  </div>
+</div>
+
+<!-- Add stock modal (kept for tab + button) -->
+<div class="modal-bg" id="modal-bg">
+  <div class="modal">
+    <h3>新增監控股票</h3>
+    <input type="text" id="modal-input" placeholder="輸入股票代號，例如 2330 或 NVDA" maxlength="10">
+    <div style="font-size:10px;color:var(--t3);margin-bottom:12px;">台股輸入數字代號（6467），美股輸入英文代號（TSLA）</div>
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="closeModal()">取消</button>
+      <button class="modal-ok" onclick="addStock()">新增</button>
+    </div>
+  </div>
+</div>
+
+<div class="shell">
+  <!-- Top bar -->
+  <div class="topbar">
+    <div class="logo">
+      <span class="logo-dot"></span>
+      股票進出場監控系統
+    </div>
+    <div class="topbar-right">
+      <span class="status-bar" id="status-bar">等待資料...</span>
+      <span class="time-chip" id="cur-time">--:--:--</span>
+      <button class="btn-sm" id="refresh-btn" onclick="loadData(true)">
+        <svg id="refresh-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.37"/></svg>
+        更新資料
+      </button>
+      <button class="btn-sm" onclick="openSettings()">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        設定
+      </button>
+    </div>
+  </div>
+
+  <!-- Market indices -->
+  <div style="font-size:10px;letter-spacing:.12em;color:var(--t3);text-transform:uppercase;margin-bottom:8px;">第一層：大盤風向</div>
+  <div class="market-grid" id="market-grid">
+    <div class="mcard"><div class="mcard-accent" style="background:var(--green)"></div><div class="mcard-label">台股 TAIEX</div><div class="mcard-val" style="color:var(--t3)">載入中...</div></div>
+    <div class="mcard"><div class="mcard-accent" style="background:var(--blue)"></div><div class="mcard-label">S&P 500</div><div class="mcard-val" style="color:var(--t3)">載入中...</div></div>
+    <div class="mcard"><div class="mcard-accent" style="background:var(--purple)"></div><div class="mcard-label">NASDAQ</div><div class="mcard-val" style="color:var(--t3)">載入中...</div></div>
+    <div class="mcard"><div class="mcard-accent" style="background:var(--yellow)"></div><div class="mcard-label">VIX</div><div class="mcard-val" style="color:var(--t3)">載入中...</div></div>
+  </div>
+
+  <!-- Stock selector tabs -->
+  <div class="stock-tabs" id="stock-tabs"></div>
+
+  <!-- Main panels -->
+  <div class="main-grid">
+    <!-- Left: indicators -->
+    <div class="panel">
+      <div class="panel-title">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        技術指標 — <span id="cur-stock-label">-</span>
+      </div>
+      <div class="price-header">
+        <span class="price-big" id="cur-price">--</span>
+        <span class="price-chg" id="cur-chg">--</span>
+        <span class="vol-ratio-badge" id="vol-ratio-badge">量比 --</span>
+      </div>
+      <div class="ind-grid">
+        <!-- KD -->
+        <div class="ind-card">
+          <div class="ind-label">KD 隨機指標</div>
+          <div class="ind-row"><span class="ind-key">K值</span><span class="ind-val" id="kv">--</span></div>
+          <div class="ind-row"><span class="ind-key">D值</span><span class="ind-val" id="dv">--</span></div>
+          <div class="ind-row" style="margin-top:6px"><span class="ind-key">訊號</span><span class="sig sig-hold" id="kd-sig">--</span></div>
+          <div class="gauge-wrap">
+            <div class="gauge-bar"><div class="gauge-fill" id="kd-gauge" style="width:50%;background:linear-gradient(90deg,var(--green),var(--yellow))"></div></div>
+            <div class="gauge-labels"><span>超跌</span><span>中性</span><span>過熱</span></div>
+          </div>
+        </div>
+        <!-- MACD -->
+        <div class="ind-card">
+          <div class="ind-label">MACD</div>
+          <div class="ind-row"><span class="ind-key">DIF</span><span class="ind-val" id="dif-v">--</span></div>
+          <div class="ind-row"><span class="ind-key">MACD</span><span class="ind-val" id="macd-v">--</span></div>
+          <div class="ind-row"><span class="ind-key">OSC</span><span class="ind-val" id="osc-v">--</span></div>
+          <div class="ind-row" style="margin-top:6px"><span class="ind-key">訊號</span><span class="sig sig-hold" id="macd-sig">--</span></div>
+        </div>
+        <!-- RSI -->
+        <div class="ind-card">
+          <div class="ind-label">RSI 相對強弱</div>
+          <div class="ind-row"><span class="ind-key">RSI 6</span><span class="ind-val" id="rsi6-v">--</span></div>
+          <div class="ind-row"><span class="ind-key">RSI 12</span><span class="ind-val" id="rsi12-v">--</span></div>
+          <div class="ind-row"><span class="ind-key">RSI 24</span><span class="ind-val" id="rsi24-v">--</span></div>
+          <div class="gauge-wrap">
+            <div class="gauge-bar"><div class="gauge-fill" id="rsi-gauge" style="width:50%;background:linear-gradient(90deg,var(--red),var(--yellow),var(--green))"></div></div>
+            <div class="gauge-labels"><span>&lt;20</span><span>正常</span><span>&gt;80</span></div>
+          </div>
+        </div>
+        <!-- Bollinger -->
+        <div class="ind-card">
+          <div class="ind-label">布林通道</div>
+          <div class="ind-row"><span class="ind-key">上軌</span><span class="ind-val" id="bb-up">--</span></div>
+          <div class="ind-row"><span class="ind-key">中軌</span><span class="ind-val c-blue" id="bb-mid">--</span></div>
+          <div class="ind-row"><span class="ind-key">下軌</span><span class="ind-val" id="bb-low">--</span></div>
+          <div class="ind-row" style="margin-top:6px"><span class="ind-key">位置</span><span class="sig sig-hold" id="bb-sig">--</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right column -->
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <!-- MA -->
+      <div class="panel">
+        <div class="panel-title">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+          第二層：均線趨勢
+        </div>
+        <div id="ma-section"></div>
+      </div>
+      <!-- AI score -->
+      <div class="panel">
+        <div class="panel-title">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+          AI 綜合評分
+        </div>
+        <div class="score-wrap">
+          <div class="score-ring">
+            <svg width="78" height="78" viewBox="0 0 78 78">
+              <circle cx="39" cy="39" r="30" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="7"/>
+              <circle cx="39" cy="39" r="30" fill="none" stroke="var(--green)" stroke-width="7" stroke-linecap="round"
+                stroke-dasharray="188.5" id="score-arc" stroke-dashoffset="47.1"/>
+            </svg>
+            <div class="score-center">
+              <div class="score-num c-green" id="score-num">75</div>
+              <div class="score-label">/ 100</div>
+            </div>
+          </div>
+          <div style="flex:1">
+            <div style="font-size:12px;font-weight:700;margin-bottom:8px" id="score-verdict">--</div>
+            <div class="chips" id="score-chips"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fund flow + Risk -->
+  <div class="main-grid">
+    <div class="panel">
+      <div class="panel-title">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        模組5：資金流向（法人）
+      </div>
+      <div id="fund-section">
+        <div style="color:var(--t3);font-size:11px">台股限定功能，美股顯示替代資料</div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-title">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        模組6：風險控制
+      </div>
+      <div id="risk-section"></div>
+    </div>
+  </div>
+
+  <!-- Alerts -->
+  <div style="font-size:10px;letter-spacing:.12em;color:var(--t3);text-transform:uppercase;margin-bottom:8px;">警示區 — 即時訊號</div>
+  <div class="alert-list" id="alert-list">
+    <div style="color:var(--t3);font-size:11px;padding:8px">等待資料載入...</div>
+  </div>
+
+  <!-- Bottom grid -->
+  <div class="bot-grid">
+    <div class="panel">
+      <div class="panel-title">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        成交量分析
+      </div>
+      <div id="vol-section"></div>
+    </div>
+    <div class="panel">
+      <div class="panel-title">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        多股概覽
+      </div>
+      <table class="stock-table">
+        <thead><tr><th>代號</th><th>價格</th><th>KD</th><th>評分</th><th>訊號</th></tr></thead>
+        <tbody id="overview-tbody"></tbody>
+      </table>
+    </div>
+    <div class="panel">
+      <div class="panel-title">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        進場條件檢核
+      </div>
+      <div id="checklist-section"></div>
+    </div>
+  </div>
+
+  <div style="text-align:center;margin-top:20px;font-size:10px;color:var(--t3);padding:10px">
+    資料來源：Yahoo Finance · TWSE OpenAPI｜指標由前端自動計算｜每日收盤後自動更新
+    <br>⚠️ 本系統僅供技術分析參考，不構成投資建議
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="js/indicators.js"></script>
+<script src="js/stockApi.js"></script>
+<script>
+// ════════════════════════════════════════════
+//  dashboard.js — 主控制器
+// ════════════════════════════════════════════
+
+const DEFAULT_SYMBOLS = ['6467','2401','TSLA'];
+let SYMBOLS  = JSON.parse(localStorage.getItem('stock-symbols') || 'null') || [...DEFAULT_SYMBOLS];
+let DATA     = {};
+let CUR_SYM  = SYMBOLS[0];
+let priceChart = null;
+
+// ─── 顏色工具 ────────────────────────────────
+const isPos = v => v >= 0;
+const fmtChg = (v, pct) => {
+  const sign = v >= 0 ? '▲ +' : '▼ ';
+  return `${sign}${Math.abs(v).toFixed(2)} (${v >= 0 ? '+' : ''}${pct.toFixed(2)}%)`;
+};
+const fmtNum = (v, dec=2) => v == null ? '--' : parseFloat(v).toFixed(dec);
+const colorOf = v => v == null ? '' : v >= 0 ? 'c-green' : 'c-red';
+
+// ─── KD/MACD/BB 訊號文字 ──────────────────────
+const KD_LABELS = {
+  strong_buy:'🔥 強力買進', buy:'↑ 黃金交叉', oversold:'超跌反轉',
+  strong_sell:'⚠ 強力賣出', sell:'↓ 死亡交叉', overbought:'KD鈍化過熱', hold:'中性'
+};
+const KD_CLASSES = {
+  strong_buy:'sig-buy', buy:'sig-buy', oversold:'sig-buy',
+  strong_sell:'sig-sell', sell:'sig-sell', overbought:'sig-watch', hold:'sig-hold'
+};
+const MACD_LABELS = { golden_cross:'黃金交叉', death_cross:'死亡交叉', bullish:'紅柱放大', bearish:'綠柱放大', hold:'中性' };
+const MACD_CLASSES = { golden_cross:'sig-buy', death_cross:'sig-sell', bullish:'sig-buy', bearish:'sig-sell', hold:'sig-hold' };
+const BB_LABELS = { above_upper:'突破上軌強勢', below_lower:'跌破下軌弱勢', upper_half:'中軌以上偏多', lower_half:'中軌以下偏空', mid:'中軌附近' };
+const BB_CLASSES = { above_upper:'sig-watch', below_lower:'sig-watch', upper_half:'sig-buy', lower_half:'sig-sell', mid:'sig-hold' };
+const SCORE_VERDICTS = [
+  [80,'強烈建議買進 🔥'],[60,'建議買進觀察'],[45,'中性持續觀察'],[30,'建議減倉觀察'],[0,'高風險注意停損']
+];
+
+// ─── 市場指數渲染 ─────────────────────────────
+function renderMarket(market) {
+  const map = {
+    '^TWII': {label:'台股 TAIEX', sub:'', color:'--green'},
+    '^GSPC': {label:'S&P 500',   sub:'', color:'--blue'},
+    '^IXIC': {label:'NASDAQ',    sub:'', color:'--purple'},
+    '^VIX':  {label:'VIX 恐慌', sub:'', color:'--yellow'}
+  };
+  const grid = document.getElementById('market-grid');
+  grid.innerHTML = Object.entries(map).map(([sym, cfg]) => {
+    const d = market[sym];
+    if (!d) return `<div class="mcard"><div class="mcard-accent" style="background:var(${cfg.color})"></div>
+      <div class="mcard-label">${cfg.label}</div><div class="mcard-val c-t3">無法取得</div></div>`;
+    const chgClass = isPos(d.change) ? 'c-green' : 'c-red';
+    const sign     = isPos(d.change) ? '▲ +' : '▼ ';
+    const vixNote  = sym==='^VIX' ? (d.price < 20 ? '市場穩定' : d.price < 30 ? '輕微恐慌' : '高度恐慌') : '';
+    return `<div class="mcard">
+      <div class="mcard-accent" style="background:var(${cfg.color})"></div>
+      <div class="mcard-label">${cfg.label}</div>
+      <div class="mcard-val ${chgClass}">${d.price.toLocaleString('en', {maximumFractionDigits:2})}</div>
+      <div class="mcard-chg ${chgClass}">${sign}${Math.abs(d.change).toFixed(2)} (${d.changePct.toFixed(2)}%)</div>
+      ${vixNote?`<div class="mcard-sub">${vixNote}</div>`:''}
+    </div>`;
+  }).join('');
+}
+
+// ─── 股票切換 Tab ──────────────────────────────
+function renderTabs() {
+  const tabsEl = document.getElementById('stock-tabs');
+  tabsEl.innerHTML = SYMBOLS.map((s, i) => {
+    const d = DATA.stocks?.[s];
+    const active = s === CUR_SYM ? 'active' : '';
+    return `<button class="stab ${active}" onclick="switchStock('${s}')">${s}${d ? ' ' + fmtChg(d.change,d.changePct).split(' ')[0] : ''}</button>`;
+  }).join('') +
+  `<button class="stab stab-add" onclick="openModal()">＋ 新增</button>`;
+}
+
+function switchStock(sym) {
+  CUR_SYM = sym;
+  renderTabs();
+  renderStockDetail(sym);
+}
+
+// ─── 單股詳細資料 ─────────────────────────────
+function renderStockDetail(sym) {
+  const d = DATA.stocks?.[sym];
+  if (!d) { document.getElementById('cur-stock-label').textContent = sym + '（無資料）'; return; }
+  const ind = d.indicators;
+  document.getElementById('cur-stock-label').textContent = `${sym} ${d.name || ''}`;
+  document.getElementById('cur-price').textContent = d.price?.toFixed(2) || '--';
+  const chgEl = document.getElementById('cur-chg');
+  chgEl.textContent = fmtChg(d.change||0, d.changePct||0);
+  chgEl.className = 'price-chg ' + colorOf(d.change);
+
+  if (ind) {
+    // Vol ratio
+    const vr = ind.volRatio;
+    const vrEl = document.getElementById('vol-ratio-badge');
+    vrEl.textContent = `量比 ${vr != null ? vr.toFixed(2) + '×' : '--'}`;
+    vrEl.className = 'vol-ratio-badge ' + (vr >= 2 ? 'c-green' : vr >= 1 ? '' : 'c-t3');
+
+    // KD
+    document.getElementById('kv').textContent = fmtNum(ind.K);
+    document.getElementById('kv').className = 'ind-val ' + colorOf(ind.K >= 50 ? 1 : -1);
+    document.getElementById('dv').textContent = fmtNum(ind.D);
+    const kdSigEl = document.getElementById('kd-sig');
+    kdSigEl.textContent = KD_LABELS[ind.kdSignal] || ind.kdSignal;
+    kdSigEl.className = 'sig ' + KD_CLASSES[ind.kdSignal];
+    document.getElementById('kd-gauge').style.width = (ind.K || 50) + '%';
+
+    // MACD
+    document.getElementById('dif-v').textContent = (ind.dif > 0 ? '+' : '') + fmtNum(ind.dif);
+    document.getElementById('dif-v').className = 'ind-val ' + colorOf(ind.dif);
+    document.getElementById('macd-v').textContent = (ind.macd > 0 ? '+' : '') + fmtNum(ind.macd);
+    document.getElementById('osc-v').textContent = (ind.osc > 0 ? '+' : '') + fmtNum(ind.osc);
+    document.getElementById('osc-v').className = 'ind-val ' + colorOf(ind.osc);
+    const macdSigEl = document.getElementById('macd-sig');
+    macdSigEl.textContent = MACD_LABELS[ind.macdSignal] || ind.macdSignal;
+    macdSigEl.className = 'sig ' + MACD_CLASSES[ind.macdSignal];
+
+    // RSI
+    ['rsi6-v','rsi12-v','rsi24-v'].forEach((id, i) => {
+      const v = [ind.rsi6, ind.rsi12, ind.rsi24][i];
+      const el = document.getElementById(id);
+      el.textContent = fmtNum(v);
+      el.className = 'ind-val ' + (v < 20 ? 'c-green' : v > 80 ? 'c-red' : 'c-yellow');
+    });
+    document.getElementById('rsi-gauge').style.width = (ind.rsi6 || 50) + '%';
+
+    // Bollinger
+    document.getElementById('bb-up').textContent = fmtNum(ind.bbUpper);
+    document.getElementById('bb-mid').textContent = fmtNum(ind.bbMid);
+    document.getElementById('bb-low').textContent = fmtNum(ind.bbLower);
+    const bbSigEl = document.getElementById('bb-sig');
+    bbSigEl.textContent = BB_LABELS[ind.bbSignal];
+    bbSigEl.className = 'sig ' + BB_CLASSES[ind.bbSignal];
+
+    // MA
+    renderMA(ind);
+    // AI score
+    renderScore(ind);
+    // Risk
+    renderRisk(d, ind);
+    // Volume
+    renderVolume(ind, d);
+    // Checklist
+    renderChecklist(ind, d);
+  }
+  // Fund（台股）
+  renderFund(d);
+}
+
+function renderMA(ind) {
+  const mas = [
+    {name:'MA5',  val:ind.ma5,  color:'#3d9bff'},
+    {name:'MA20', val:ind.ma20, color:'#10d07a'},
+    {name:'MA60', val:ind.ma60, color:'#f5c842'},
+    {name:'MA120',val:ind.ma120,color:'#ff9f43'},
+  ];
+  const cl = ind.close || 0;
+  let html = mas.map(m => {
+    if (!m.val) return '';
+    const pct = Math.min(100, Math.max(5, ((m.val / (cl * 1.3)) * 100)));
+    const isAbove = cl > m.val;
+    return `<div class="ma-row">
+      <div class="ma-dot" style="background:${m.color}"></div>
+      <div class="ma-name">${m.name}</div>
+      <div class="ma-val">${m.val.toFixed(2)}</div>
+      <div class="ma-trend ${isAbove?'c-green':'c-red'}">${isAbove?'↑':'↓'}</div>
+    </div>`;
+  }).join('');
+
+  const arr = ind.maArrangement;
+  const arrMsg = arr==='bull'? '✓ 多頭排列 5>20>60>120' : arr==='bear'? '✗ 空頭排列' : arr==='short_bull'? '△ 短線轉強' : '— 均線糾結';
+  const arrColor = arr==='bull'?'var(--green)':arr==='bear'?'var(--red)':arr==='short_bull'?'var(--yellow)':'var(--t3)';
+  html += `<div style="margin-top:8px;padding:5px 9px;background:var(--bg3);border-radius:6px;border:0.5px solid var(--border2)">
+    <span style="font-size:10px;font-weight:700;color:${arrColor}">${arrMsg}</span></div>`;
+  document.getElementById('ma-section').innerHTML = html;
+}
+
+function renderScore(ind) {
+  const s = ind.score;
+  const color = s >= 60 ? 'var(--green)' : s >= 40 ? 'var(--yellow)' : 'var(--red)';
+  document.getElementById('score-num').textContent = s;
+  document.getElementById('score-num').style.color = color;
+  document.getElementById('score-arc').style.stroke = color;
+  const offset = 188.5 * (1 - s / 100);
+  document.getElementById('score-arc').setAttribute('stroke-dashoffset', offset.toFixed(1));
+  const verdict = SCORE_VERDICTS.find(([min]) => s >= min)?.[1] || '--';
+  document.getElementById('score-verdict').textContent = verdict;
+
+  const chips = [];
+  if (ind.maArrangement==='bull') chips.push({t:'多頭排列',c:'buy'});
+  else if (ind.maArrangement==='bear') chips.push({t:'空頭排列',c:'sell'});
+  if (ind.macdSignal==='golden_cross') chips.push({t:'MACD金叉',c:'buy'});
+  else if (ind.macdSignal==='death_cross') chips.push({t:'MACD死叉',c:'sell'});
+  if (ind.kdSignal==='buy'||ind.kdSignal==='strong_buy') chips.push({t:'KD黃金交叉',c:'buy'});
+  else if (ind.kdSignal==='sell'||ind.kdSignal==='strong_sell') chips.push({t:'KD死亡交叉',c:'sell'});
+  if (ind.rsi6 < 20) chips.push({t:'RSI超跌',c:'buy'});
+  else if (ind.rsi6 > 80) chips.push({t:'RSI過熱',c:'sell'});
+  if (ind.volRatio >= 2) chips.push({t:'量放大',c:'buy'});
+  if (chips.length === 0) chips.push({t:'無特殊訊號',c:'neutral'});
+  document.getElementById('score-chips').innerHTML = chips.map(c =>
+    `<span class="chip chip-${c.c}">${c.t}</span>`).join('');
+}
+
+function renderFund(d) {
+  const isTW = /^\d+$/.test(CUR_SYM);
+  const inst = d?.institutional;
+  if (!isTW || !inst) {
+    document.getElementById('fund-section').innerHTML =
+      `<div style="color:var(--t3);font-size:11px">法人資料${isTW?'：抓取中或無資料':'：美股不提供法人資料'}</div>
+      <div style="margin-top:12px;padding:9px 12px;background:var(--bg3);border-radius:7px;font-size:11px;color:var(--t2)">
+        台股法人資料由 TWSE 提供，需在台股交易時段後取得</div>`;
+    return;
+  }
+  const fv = inst.latest?.foreign || 0;
+  const tv = inst.latest?.trust || 0;
+  const dv = inst.latest?.dealer || 0;
+  const maxAbs = Math.max(Math.abs(fv), Math.abs(tv), Math.abs(dv), 1);
+  const barW = v => Math.min(48, Math.abs(v) / maxAbs * 48).toFixed(1) + '%';
+  const renderRow = (name, v, days, color) => `<div class="fund-row">
+    <div class="fund-name">${name}</div>
+    <div class="fund-track">
+      <div class="fund-mid"></div>
+      ${v >= 0
+        ? `<div class="fund-bar-pos" style="width:${barW(v)};background:${color}"></div>`
+        : `<div class="fund-bar-neg" style="width:${barW(v)};background:var(--red)"></div>`}
+    </div>
+    <div class="fund-val ${v>=0?'c-green':'c-red'}">${v>=0?'+':''}${v.toLocaleString()}</div>
+    <div class="fund-days">${days}</div>
+  </div>`;
+  const cons = inst.consecutive;
+  document.getElementById('fund-section').innerHTML =
+    renderRow('外資', fv, `${cons.direction==='buy'?'連買':'連賣'}${cons.days}日`, 'var(--green)') +
+    renderRow('投信', tv, inst.trust3d >= 0 ? '買超' : '賣超', 'var(--blue)') +
+    renderRow('自營', dv, inst.dealer3d >= 0 ? '買超' : '賣超', 'var(--purple)') +
+    `<div style="margin-top:10px;padding:7px 10px;background:var(--bg3);border-radius:7px">
+      <div style="font-size:10px;color:var(--t3);margin-bottom:3px">外資+投信 5日合計</div>
+      <div style="font-size:13px;font-weight:700;${(inst.foreign5d+inst.trust3d)>=0?'color:var(--green)':'color:var(--red)'}">
+        ${(inst.foreign5d+inst.trust3d)>=0?'+':''}${(inst.foreign5d+inst.trust3d).toLocaleString()} 張</div></div>`;
+}
+
+function renderRisk(d, ind) {
+  const cost = d.prevClose || d.price;
+  const slPct  = (DISPLAY_SETTINGS.sl  || 5)  / 100;
+  const tpPct  = (DISPLAY_SETTINGS.tp  || 20) / 100;
+  const mtpPct = (DISPLAY_SETTINGS.mtp || 8)  / 100;
+  const sl   = (cost * (1 - slPct)).toFixed(2);
+  const tp   = (cost * (1 + tpPct)).toFixed(2);
+  const mtp  = ((d.price || cost) * (1 - mtpPct)).toFixed(2);
+  const pnl  = d.price ? ((d.price - cost) / cost * 100).toFixed(2) : 0;
+  const max  = parseFloat(tp);
+  const pct  = v => Math.max(5, Math.min(95, (v / max * 100))).toFixed(1) + '%';
+  document.getElementById('risk-section').innerHTML = `
+    <div class="risk-row">
+      <div class="risk-label">停損 -${DISPLAY_SETTINGS.sl||5}%</div>
+      <div class="risk-track"><div class="risk-fill" style="width:${pct(parseFloat(sl))};background:var(--red)"></div></div>
+      <div class="risk-val c-red">${sl}</div>
+    </div>
+    <div class="risk-row">
+      <div class="risk-label">現價</div>
+      <div class="risk-track"><div class="risk-fill" style="width:${pct(d.price||cost)};background:var(--blue)"></div></div>
+      <div class="risk-val c-blue">${(d.price||cost).toFixed(2)}</div>
+    </div>
+    <div class="risk-row">
+      <div class="risk-label">停利 +${DISPLAY_SETTINGS.tp||20}%</div>
+      <div class="risk-track"><div class="risk-fill" style="width:95%;background:var(--green)"></div></div>
+      <div class="risk-val c-green">${tp}</div>
+    </div>
+    <div class="risk-row">
+      <div class="risk-label">移動停利</div>
+      <div class="risk-track"><div class="risk-fill" style="width:${pct(parseFloat(mtp))};background:var(--yellow)"></div></div>
+      <div class="risk-val c-yellow">回檔${DISPLAY_SETTINGS.mtp||8}%</div>
+    </div>
+    <div class="mini-stat-row">
+      <div class="mini-stat"><div class="mini-stat-l">前日收盤</div><div class="mini-stat-r">${cost.toFixed(2)}</div></div>
+      <div class="mini-stat"><div class="mini-stat-l">漲跌幅</div>
+        <div class="mini-stat-r ${parseFloat(pnl)>=0?'c-green':'c-red'}">${parseFloat(pnl)>=0?'+':''}${pnl}%</div></div>
+    </div>`;
+}
+
+function renderVolume(ind, d) {
+  const vols  = ind?.history?.volumes?.slice(-7) || [];
+  const dates = ind?.history?.dates?.slice(-7) || [];
+  if (!vols.length) { document.getElementById('vol-section').innerHTML = '<div style="color:var(--t3);font-size:11px">無量能資料</div>'; return; }
+  const maxV  = Math.max(...vols, 1);
+  const vr    = ind.volRatio;
+  const lastV = vols[vols.length-1];
+  const avg5  = vols.slice(-6,-1).reduce((a,b)=>a+b,0)/Math.max(1,Math.min(5,vols.length-1));
+  const bars  = vols.map((v,i) => {
+    const h = Math.max(8, (v / maxV * 100)).toFixed(0);
+    const isToday = i === vols.length - 1;
+    const color = isToday ? (v > avg5 ? 'var(--green)' : 'var(--blue)') : 'rgba(61,155,255,.35)';
+    const label = dates[i] ? dates[i].slice(5) : '';
+    return `<div class="vol-b" style="height:${h}%;background:${color};${isToday?'border:0.5px solid rgba(16,208,122,.4)':''}"><span>${label}</span></div>`;
+  }).join('');
+  document.getElementById('vol-section').innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px">
+      <div class="mini-stat"><div class="mini-stat-l">今日量</div><div class="mini-stat-r">${lastV?.toLocaleString()}張</div></div>
+      <div class="mini-stat"><div class="mini-stat-l">5日均量</div><div class="mini-stat-r">${Math.round(avg5).toLocaleString()}張</div></div>
+      <div class="mini-stat"><div class="mini-stat-l">量比</div>
+        <div class="mini-stat-r ${vr>=2?'c-green':vr>=1?'':'c-t3'}">${vr?vr.toFixed(2)+'×':'--'}</div></div>
+      <div class="mini-stat"><div class="mini-stat-l">解讀</div>
+        <div class="mini-stat-r" style="font-size:10px">${vr>=3?'異常量🔥':vr>=2?'主力進場':vr>=1?'開始放量':'正常'}</div></div>
+    </div>
+    <div class="vol-bars">${bars}</div>`;
+}
+
+function renderChecklist(ind, d) {
+  const items = [
+    { ok: ind.maArrangement==='bull', text:'趨勢向上（多頭排列）' },
+    { ok: ind.macdSignal==='golden_cross'||ind.macdSignal==='bullish', text:'MACD 黃金交叉 / 紅柱放大' },
+    { ok: ind.volRatio >= 1.5, text:`成交量放大（${ind.volRatio?.toFixed(2) || '--'}×）` },
+    { ok: d?.institutional?.consecutive?.direction==='buy' && d?.institutional?.consecutive?.days >= 3,
+      text: d?.institutional ? `外資連買 ${d.institutional.consecutive?.days || 0} 日` : '外資買超（台股）' },
+    { ok: ind.rsi6 < 80 && ind.rsi6 > 20, text:`RSI 未過熱（${ind.rsi6?.toFixed(1) || '--'}）` },
+    { ok: false, text:'籌碼集中度（需手動確認）', na: true },
+  ];
+  const ok = items.filter(i => i.ok && !i.na).length;
+  const total = items.filter(i => !i.na).length;
+  const pct = Math.round(ok / total * 100);
+  const resColor = pct >= 70 ? 'var(--green)' : pct >= 50 ? 'var(--yellow)' : 'var(--red)';
+  const resMsg = pct >= 70 ? '可考慮建倉' : pct >= 50 ? '部分條件達成，謹慎觀察' : '條件不足，暫緩';
+
+  document.getElementById('checklist-section').innerHTML =
+    items.map(item => `<div class="check-row">
+      <div class="check-icon">${item.na ? '◻' : item.ok ? '<span class="c-green">✓</span>' : '<span class="c-red">✗</span>'}</div>
+      <div class="check-label ${!item.ok && !item.na ? 'muted' : ''}">${item.text}</div>
+    </div>`).join('') +
+    `<div class="entry-result" style="background:var(--bg3);border:0.5px solid var(--border2);border-radius:7px;padding:8px 10px;margin-top:4px">
+      <div style="font-size:13px;font-weight:700;color:${resColor}">${ok}/${total} 條件 — ${resMsg}</div>
+    </div>`;
+}
+
+// ─── 警示 ────────────────────────────────────
+function generateAlerts() {
+  const alerts = [];
+  for (const [sym, d] of Object.entries(DATA.stocks || {})) {
+    const ind = d.indicators;
+    if (!ind) continue;
+    if (ind.kdSignal === 'buy' || ind.kdSignal === 'strong_buy')
+      alerts.push({ type:'buy', title:`${sym} — KD 黃金交叉`, desc:`K(${fmtNum(ind.K)}) 上穿 D(${fmtNum(ind.D)})，低檔反轉訊號`, time:'' });
+    if (ind.kdSignal === 'sell' || ind.kdSignal === 'strong_sell')
+      alerts.push({ type:'sell', title:`${sym} — KD 死亡交叉`, desc:`K(${fmtNum(ind.K)}) 下穿 D，注意風險`, time:'' });
+    if (ind.macdSignal === 'golden_cross')
+      alerts.push({ type:'buy', title:`${sym} — MACD 黃金交叉`, desc:`DIF 上穿 MACD，多頭動能增強`, time:'' });
+    if (ind.macdSignal === 'death_cross')
+      alerts.push({ type:'sell', title:`${sym} — MACD 死亡交叉`, desc:`DIF 下穿 MACD，多頭動能轉弱`, time:'' });
+    if (ind.volRatio >= 2)
+      alerts.push({ type:'warn', title:`${sym} — 成交量異常放大`, desc:`量比 ${fmtNum(ind.volRatio)}×，可能有主力進出`, time:'' });
+    if (ind.maArrangement === 'bull')
+      alerts.push({ type:'info', title:`${sym} — 多頭排列確認`, desc:`MA5 > MA20 > MA60 > MA120，長線趨勢向上`, time:'' });
+    if (d.institutional?.consecutive?.direction === 'buy' && d.institutional?.consecutive?.days >= 3)
+      alerts.push({ type:'buy', title:`${sym} — 外資連買 ${d.institutional.consecutive.days} 日`, desc:`法人籌碼持續流入，籌碼面偏多`, time:'' });
+    if (ind.rsi6 < 20)
+      alerts.push({ type:'buy', title:`${sym} — RSI 超跌（${fmtNum(ind.rsi6)}）`, desc:`6日RSI進入超跌區，可能反彈`, time:'' });
+    if (ind.rsi6 > 80)
+      alerts.push({ type:'sell', title:`${sym} — RSI 過熱（${fmtNum(ind.rsi6)}）`, desc:`6日RSI進入過熱區，注意獲利了結`, time:'' });
+  }
+  if (!alerts.length) {
+    document.getElementById('alert-list').innerHTML = `<div style="color:var(--t3);font-size:11px;padding:8px">目前無特殊訊號</div>`;
+    return;
+  }
+  document.getElementById('alert-list').innerHTML = alerts.slice(0, 8).map(a => `
+    <div class="alert-item a-${a.type}">
+      <div class="alert-dot"></div>
+      <div class="alert-body">
+        <div class="alert-title">${a.title}</div>
+        <div class="alert-desc">${a.desc}</div>
+      </div>
+      <div class="alert-time">${a.time || '今日'}</div>
+    </div>`).join('');
+}
+
+// ─── 多股概覽表格 ─────────────────────────────
+function renderOverview() {
+  const rows = SYMBOLS.map(sym => {
+    const d = DATA.stocks?.[sym];
+    if (!d) return `<tr><td><div class="sym">${sym}</div></td><td colspan="4" style="color:var(--t3)">載入中</td></tr>`;
+    const ind = d.indicators;
+    const chgClass = colorOf(d.change);
+    let sigText = '--', sigClass = 'sig-hold';
+    if (ind) {
+      const overall = ind.score;
+      sigText = overall >= 65 ? '買進' : overall >= 50 ? '觀察' : overall >= 35 ? '中性' : '注意';
+      sigClass = overall >= 65 ? 'sig-buy' : overall >= 50 ? 'sig-watch' : overall >= 35 ? 'sig-hold' : 'sig-sell';
+    }
+    return `<tr onclick="switchStock('${sym}')" style="cursor:pointer">
+      <td><div class="sym">${sym}</div><div class="sym-name">${d.name?.slice(0,6)||''}</div></td>
+      <td class="${chgClass}" style="font-weight:700">${d.price?.toFixed(2)||'--'}</td>
+      <td style="font-size:10px">${ind ? `K${fmtNum(ind.K,0)}/D${fmtNum(ind.D,0)}` : '--'}</td>
+      <td><span style="font-size:11px;font-weight:700;${ind?.score>=60?'color:var(--green)':ind?.score>=40?'color:var(--yellow)':'color:var(--red)'}">${ind?.score||'--'}</span></td>
+      <td><span class="sig ${sigClass}">${sigText}</span></td>
+    </tr>`;
+  }).join('');
+  document.getElementById('overview-tbody').innerHTML = rows;
+}
+
+// ─── 載入資料 ─────────────────────────────────
+async function loadData(force = false) {
+  const btn = document.getElementById('refresh-btn');
+  const icon = document.getElementById('refresh-icon');
+  btn.classList.add('loading'); icon.classList.add('spin');
+  setStatus('連線中...');
+
+  try {
+    DATA = await StockAPI.fetchAll(SYMBOLS, (pct, msg) => {
+      document.getElementById('load-pct').textContent = pct + '%';
+      document.getElementById('load-msg').textContent = msg;
+      setStatus(msg);
+    });
+
+    if (DATA.market) renderMarket(DATA.market);
+    renderTabs();
+    renderStockDetail(CUR_SYM);
+    renderOverview();
+    generateAlerts();
+
+    const updated = DATA.updatedAt ? new Date(DATA.updatedAt).toLocaleString('zh-TW') : '--';
+    setStatus(`更新完成 ${updated}`);
+    showToast('✓ 資料更新完成');
+  } catch (e) {
+    setStatus('資料載入失敗：' + e.message);
+    showToast('⚠ 載入失敗，請稍後重試');
+    console.error(e);
+  }
+
+  btn.classList.remove('loading'); icon.classList.remove('spin');
+  document.getElementById('loading-overlay').classList.add('hidden');
+}
+
+// ─── 新增股票（modal，from tab） ──────────────
+function openModal() { document.getElementById('modal-bg').classList.add('open'); document.getElementById('modal-input').focus(); }
+function closeModal() { document.getElementById('modal-bg').classList.remove('open'); document.getElementById('modal-input').value = ''; }
+async function addStock() {
+  const sym = document.getElementById('modal-input').value.trim().toUpperCase();
+  if (!sym) return;
+  if (SYMBOLS.includes(sym)) { showToast('該股票已在監控清單中'); return; }
+  SYMBOLS.push(sym);
+  saveSymbols();
+  closeModal();
+  showToast(`新增 ${sym}，正在抓取資料...`);
+  renderSymList();
+  await loadData(true);
+}
+
+// ════════════════════════════════════════════
+//  設定面板
+// ════════════════════════════════════════════
+
+const PRESET_STOCKS = [
+  {sym:'2330',name:'台積電'},{sym:'2317',name:'鴻海'},{sym:'2412',name:'中華電'},
+  {sym:'2454',name:'聯發科'},{sym:'2308',name:'台達電'},{sym:'0050',name:'元大台50'},
+  {sym:'NVDA',name:'輝達'},{sym:'AAPL',name:'蘋果'},{sym:'MSFT',name:'微軟'},
+  {sym:'AMZN',name:'亞馬遜'},{sym:'META',name:'Meta'},{sym:'AMD',name:'超微'}
+];
+
+let GH_SETTINGS = JSON.parse(localStorage.getItem('gh-settings') || '{}');
+let DISPLAY_SETTINGS = JSON.parse(localStorage.getItem('display-settings') || '{"sl":5,"tp":20,"mtp":8}');
+
+function openSettings() {
+  document.getElementById('settings-drawer').classList.add('open');
+  document.getElementById('settings-scrim').classList.add('open');
+  loadSettingsIntoDrawer();
+  renderSymList();
+  renderPresetTags();
+}
+function closeSettings() {
+  document.getElementById('settings-drawer').classList.remove('open');
+  document.getElementById('settings-scrim').classList.remove('open');
+}
+
+function loadSettingsIntoDrawer() {
+  document.getElementById('gh-owner').value = GH_SETTINGS.owner || '';
+  document.getElementById('gh-repo').value  = GH_SETTINGS.repo  || 'stock-monitor';
+  document.getElementById('gh-token').value = GH_SETTINGS.token || '';
+  document.getElementById('gh-cron').value  = GH_SETTINGS.cron  || '30 9 * * 1-5';
+  document.getElementById('sl-pct').value   = DISPLAY_SETTINGS.sl  || 5;
+  document.getElementById('tp-pct').value   = DISPLAY_SETTINGS.tp  || 20;
+  document.getElementById('mtp-pct').value  = DISPLAY_SETTINGS.mtp || 8;
+  updateGHStatus();
+}
+
+function renderSymList() {
+  const list = document.getElementById('sym-list');
+  if (!list) return;
+  list.innerHTML = SYMBOLS.map((sym, i) => {
+    const d = DATA.stocks?.[sym];
+    const price = d?.price?.toFixed(2) || '--';
+    const name  = d?.name?.slice(0, 8) || '';
+    const chgC  = d ? (d.change >= 0 ? 'color:var(--green)' : 'color:var(--red)') : '';
+    return `<div class="sym-item">
+      <div class="sym-item-code">${sym}</div>
+      <div class="sym-item-name">${name}</div>
+      <div class="sym-item-price" style="${chgC}">${price}</div>
+      <button class="sym-item-del" onclick="removeSym('${sym}')" title="移除">✕</button>
+    </div>`;
+  }).join('') || `<div style="color:var(--t3);font-size:11px;padding:8px">尚未新增任何股票</div>`;
+}
+
+function renderPresetTags() {
+  const el = document.getElementById('preset-tags');
+  if (!el) return;
+  el.innerHTML = PRESET_STOCKS
+    .filter(p => !SYMBOLS.includes(p.sym))
+    .map(p => `<button class="preset-tag" onclick="addPreset('${p.sym}')">${p.sym} ${p.name}</button>`)
+    .join('');
+}
+
+function addPreset(sym) {
+  if (SYMBOLS.includes(sym)) return;
+  SYMBOLS.push(sym);
+  saveSymbols();
+  renderSymList();
+  renderPresetTags();
+  renderTabs();
+  showToast(`已新增 ${sym}，點「更新資料」載入`);
+}
+
+function addSymFromDrawer() {
+  const input = document.getElementById('add-sym-input');
+  const sym = input.value.trim().toUpperCase();
+  if (!sym) return;
+  if (SYMBOLS.includes(sym)) { showToast('已在清單中'); return; }
+  SYMBOLS.push(sym);
+  saveSymbols();
+  input.value = '';
+  renderSymList();
+  renderPresetTags();
+  renderTabs();
+  showToast(`已新增 ${sym}，點「更新資料」載入`);
+}
+
+function removeSym(sym) {
+  if (SYMBOLS.length <= 1) { showToast('至少需要保留一支股票'); return; }
+  SYMBOLS = SYMBOLS.filter(s => s !== sym);
+  if (CUR_SYM === sym) CUR_SYM = SYMBOLS[0];
+  saveSymbols();
+  renderSymList();
+  renderPresetTags();
+  renderTabs();
+  showToast(`已移除 ${sym}`);
+}
+
+function saveSymbols() {
+  localStorage.setItem('stock-symbols', JSON.stringify(SYMBOLS));
+}
+
+function saveGitHubSettings() {
+  GH_SETTINGS = {
+    owner: document.getElementById('gh-owner').value.trim(),
+    repo:  document.getElementById('gh-repo').value.trim() || 'stock-monitor',
+    token: document.getElementById('gh-token').value.trim(),
+    cron:  document.getElementById('gh-cron').value
+  };
+  localStorage.setItem('gh-settings', JSON.stringify(GH_SETTINGS));
+  updateGHStatus();
+  showToast('✓ 設定已儲存到本機');
+}
+
+function saveDisplaySettings() {
+  DISPLAY_SETTINGS = {
+    sl:  parseFloat(document.getElementById('sl-pct').value)  || 5,
+    tp:  parseFloat(document.getElementById('tp-pct').value)  || 20,
+    mtp: parseFloat(document.getElementById('mtp-pct').value) || 8
+  };
+  localStorage.setItem('display-settings', JSON.stringify(DISPLAY_SETTINGS));
+  renderStockDetail(CUR_SYM);
+  showToast('✓ 顯示設定已套用');
+}
+
+function updateGHStatus() {
+  const row = document.getElementById('gh-status-row');
+  const pill = document.getElementById('gh-status-pill');
+  const msg  = document.getElementById('gh-status-msg');
+  if (!GH_SETTINGS.owner || !GH_SETTINGS.token) {
+    row.style.display = 'none'; return;
+  }
+  row.style.display = 'flex';
+  pill.className = 'status-pill pill-ok';
+  pill.textContent = '● 已設定';
+  msg.textContent  = `${GH_SETTINGS.owner}/${GH_SETTINGS.repo}`;
+}
+
+function toggleToken() {
+  const inp = document.getElementById('gh-token');
+  const btn = document.getElementById('token-toggle-btn');
+  if (inp.type === 'password') { inp.type = 'text'; btn.textContent = '隱藏'; }
+  else { inp.type = 'password'; btn.textContent = '顯示'; }
+}
+
+// ─── 同步到 GitHub Actions ────────────────────
+async function syncToGitHub() {
+  saveGitHubSettings();
+  const { owner, repo, token, cron } = GH_SETTINGS;
+  if (!owner || !token) {
+    showToast('⚠ 請先填入 GitHub 帳號和 Token');
+    setGHStatus('warn', '缺少帳號或 Token');
+    return;
+  }
+
+  const btn = document.getElementById('sync-btn');
+  btn.disabled = true;
+  btn.textContent = '⟳ 同步中...';
+  document.getElementById('sync-log-wrap').style.display = 'block';
+  const log = document.getElementById('sync-log');
+  log.textContent = '';
+  const addLog = (msg, color='') => {
+    log.innerHTML += `<span style="color:${color||'inherit'}">${msg}</span>\n`;
+    log.scrollTop = log.scrollHeight;
+  };
+
+  addLog(`▶ 開始同步到 ${owner}/${repo}...`);
+
+  try {
+    // 1. 取得目前 workflow 檔案（需要 SHA 才能更新）
+    addLog('  取得 workflow 檔案...');
+    const getRes = await fetch(
+      `https://api.github.com/repos/${owner}/${repo}/contents/.github/workflows/update-data.yml`,
+      { headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' } }
+    );
+    if (!getRes.ok) {
+      if (getRes.status === 404) {
+        addLog('  ✗ 找不到 workflow 檔案，請先完成初始部署', 'var(--red)');
+        setGHStatus('err', '找不到 workflow 檔案');
+        return;
+      }
+      if (getRes.status === 401) {
+        addLog('  ✗ Token 驗證失敗，請確認 Token 正確且有 Contents 寫入權限', 'var(--red)');
+        setGHStatus('err', 'Token 無效');
+        return;
+      }
+      throw new Error(`GitHub API ${getRes.status}`);
+    }
+    const getJson = await getRes.json();
+    const sha = getJson.sha;
+    addLog(`  ✓ 取得檔案 SHA: ${sha.slice(0,8)}...`, 'var(--green)');
+
+    // 2. 組合新的 workflow 內容
+    const symbolsStr = SYMBOLS.join(',');
+    addLog(`  股票清單：${symbolsStr}`);
+    addLog(`  排程：${cron}`);
+
+    // 拆解 cron 為兩個觸發點（預設只更新收盤後那條）
+    const cronLines = cron.includes(',')
+      ? cron.split(',').map(c => `    - cron: '${c.trim()}'`).join('\n')
+      : `    - cron: '${cron}'`;
+
+    const newContent = `name: 每日股票資料更新
+
+on:
+  schedule:
+${cronLines}
+  workflow_dispatch:
+    inputs:
+      symbols:
+        description: '股票代號（逗號分隔，例如 6467,2401,TSLA）'
+        required: false
+        default: '${symbolsStr}'
+
+jobs:
+  update-stock-data:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install axios
+
+      - name: Fetch stock data
+        env:
+          SYMBOLS: \${{ github.event.inputs.symbols || '${symbolsStr}' }}
+        run: node scripts/fetch-data.js
+
+      - name: Commit and push data
+        run: |
+          git config user.name  "Stock Monitor Bot"
+          git config user.email "bot@stock-monitor.local"
+          git add data/stocks.json
+          git diff --staged --quiet || git commit -m "📊 自動更新股票資料 \$(date '+%Y-%m-%d %H:%M') UTC"
+          git push
+`;
+
+    // 3. Base64 encode
+    const encoded = btoa(unescape(encodeURIComponent(newContent)));
+
+    // 4. PUT 更新檔案
+    addLog('  上傳更新到 GitHub...');
+    const putRes = await fetch(
+      `https://api.github.com/repos/${owner}/${repo}/contents/.github/workflows/update-data.yml`,
+      {
+        method: 'PUT',
+        headers: {
+          Authorization: `token ${token}`,
+          Accept: 'application/vnd.github.v3+json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          message: `⚙ 更新監控股票清單：${symbolsStr}`,
+          content: encoded,
+          sha
+        })
+      }
+    );
+    if (!putRes.ok) {
+      const errJson = await putRes.json();
+      throw new Error(errJson.message || `PUT ${putRes.status}`);
+    }
+
+    addLog(`  ✓ Workflow 已更新`, 'var(--green)');
+    addLog(`  ✓ 股票清單：${symbolsStr}`, 'var(--green)');
+    addLog(`  ✓ 排程設定：${cron}`, 'var(--green)');
+    addLog(`  ✓ 下次自動更新將使用新設定`, 'var(--green)');
+
+    // 5. 選擇性：立即觸發一次 Actions
+    addLog('  觸發立即更新...');
+    const triggerRes = await fetch(
+      `https://api.github.com/repos/${owner}/${repo}/actions/workflows/update-data.yml/dispatches`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `token ${token}`,
+          Accept: 'application/vnd.github.v3+json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ ref: 'main', inputs: { symbols: symbolsStr } })
+      }
+    );
+    if (triggerRes.status === 204) {
+      addLog('  ✓ 已觸發 GitHub Actions 立即執行', 'var(--green)');
+      addLog('  資料約 2~3 分鐘後更新，請點「更新資料」載入最新數據', 'var(--yellow)');
+    } else {
+      addLog('  △ 觸發立即更新失敗（不影響排程功能）', 'var(--yellow)');
+    }
+
+    setGHStatus('ok', `同步成功 ${new Date().toLocaleTimeString('zh-TW')}`);
+    showToast('✓ 已成功同步到 GitHub Actions');
+
+  } catch (e) {
+    addLog(`  ✗ 同步失敗：${e.message}`, 'var(--red)');
+    setGHStatus('err', '同步失敗');
+    showToast('⚠ 同步失敗，請檢查設定');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '⇧ 同步股票清單 + 排程到 GitHub Actions';
+  }
+}
+
+function setGHStatus(type, msg) {
+  const row  = document.getElementById('gh-status-row');
+  const pill = document.getElementById('gh-status-pill');
+  const msgEl = document.getElementById('gh-status-msg');
+  row.style.display = 'flex';
+  pill.className = `status-pill pill-${type}`;
+  pill.textContent = type === 'ok' ? '● 正常' : type === 'warn' ? '● 注意' : '● 錯誤';
+  msgEl.textContent = msg;
+}
+
+function resetAll() {
+  if (!confirm('確定要重設所有設定？股票清單將恢復預設（6467、2401、TSLA）')) return;
+  localStorage.removeItem('stock-symbols');
+  localStorage.removeItem('gh-settings');
+  localStorage.removeItem('display-settings');
+  SYMBOLS = ['6467','2401','TSLA'];
+  GH_SETTINGS = {};
+  DISPLAY_SETTINGS = { sl:5, tp:20, mtp:8 };
+  loadSettingsIntoDrawer();
+  renderSymList();
+  renderPresetTags();
+  renderTabs();
+  showToast('已重設所有設定');
+}
+
+// ─── 工具 ─────────────────────────────────────
+function setStatus(msg) { document.getElementById('status-bar').textContent = msg; }
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+function updateClock() {
+  document.getElementById('cur-time').textContent = new Date().toLocaleTimeString('zh-TW');
+}
+
+// ─── 鍵盤快捷鍵 ──────────────────────────────
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { closeModal(); closeSettings(); }
+  if (e.key === 'r' && e.ctrlKey) { e.preventDefault(); loadData(true); }
+});
+
+// ─── 初始化 ───────────────────────────────────
+setInterval(updateClock, 1000);
+updateClock();
+// 自動每30分鐘更新
+setInterval(() => {
+  const h = new Date().getHours();
+  if (h >= 9 && h <= 17) loadData();
+}, 30 * 60 * 1000);
+loadData();
+</script>
+</body>
+</html>
