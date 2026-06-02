@@ -34,9 +34,9 @@ async function fetchYahoo(symbol) {
     volume: Math.round(quotes.volume[i]  || 0)
   })).filter(d => d.close > 0);
   const price     = parseFloat((meta.regularMarketPrice || 0).toFixed(2));
-  // 優先用 API 的 prevClose，若為 0 則改用歷史資料倒數第二天收盤價
+  // 優先用 API 的 prevClose，若為 0 則改用歷史資料最後一筆（上個交易日）收盤價
   const apiPrev   = meta.chartPreviousClose || meta.regularMarketPreviousClose || meta.previousClose || 0;
-  const histPrev  = ohlcv.length >= 2 ? ohlcv[ohlcv.length - 2].close : 0;
+  const histPrev  = ohlcv.length >= 1 ? ohlcv[ohlcv.length - 1].close : 0;
   const prevClose = parseFloat((apiPrev > 0 ? apiPrev : histPrev).toFixed(2));
   const change    = parseFloat((price - prevClose).toFixed(2));
   const changePct = prevClose > 0 ? parseFloat(((change / prevClose) * 100).toFixed(2)) : null;
@@ -60,15 +60,17 @@ async function fetchIndex(symbol, name) {
     headers: { 'User-Agent': 'Mozilla/5.0' },
     timeout: 10000
   });
-  const meta = res.data?.chart?.result?.[0]?.meta;
-  if (!meta) return null;
-  return {
-    name,
-    price:     parseFloat((meta.regularMarketPrice            || 0).toFixed(2)),
-    prevClose: parseFloat((meta.previousClose                 || 0).toFixed(2)),
-    change:    parseFloat(((meta.regularMarketPrice || 0) - (meta.previousClose || 0)).toFixed(2)),
-    changePct: parseFloat((((meta.regularMarketPrice - meta.previousClose) / meta.previousClose) * 100).toFixed(2))
-  };
+  const result = res.data?.chart?.result?.[0];
+  if (!result) return null;
+  const meta   = result.meta;
+  const closes = (result.indicators?.quote?.[0]?.close || []).filter(v => v != null);
+  const price    = parseFloat((meta.regularMarketPrice || 0).toFixed(2));
+  const apiPrev  = meta.chartPreviousClose || meta.regularMarketPreviousClose || meta.previousClose || 0;
+  const histPrev = closes.length >= 1 ? closes[closes.length - 1] : 0;
+  const prevClose = parseFloat((apiPrev > 0 ? apiPrev : histPrev).toFixed(2));
+  const change    = parseFloat((price - prevClose).toFixed(2));
+  const changePct = prevClose > 0 ? parseFloat(((change / prevClose) * 100).toFixed(2)) : null;
+  return { name, price, prevClose, change, changePct };
 }
 
 // ─── 簡化版技術指標（Node.js 環境） ──────────────
