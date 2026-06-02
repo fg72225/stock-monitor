@@ -594,10 +594,7 @@ button{cursor:pointer;font-family:inherit;outline:none}
 //  dashboard.js — 主控制器
 // ════════════════════════════════════════════
 
-const DEFAULT_SYMBOLS = ['2401','3481','TSLA'];
-// 清除舊版含 6467 的快取，強制套用新預設清單
-const _cached = JSON.parse(localStorage.getItem('stock-symbols') || 'null');
-if (_cached && _cached.includes('6467')) { localStorage.removeItem('stock-symbols'); }
+const DEFAULT_SYMBOLS = ['6467','2401','TSLA'];
 let SYMBOLS  = JSON.parse(localStorage.getItem('stock-symbols') || 'null') || [...DEFAULT_SYMBOLS];
 let DATA     = {};
 let CUR_SYM  = SYMBOLS[0];
@@ -607,7 +604,7 @@ let priceChart = null;
 const isPos = v => v >= 0;
 const fmtChg = (v, pct) => {
   const sign = v >= 0 ? '▲ +' : '▼ ';
-  return `${sign}${Math.abs(v).toFixed(2)} (${v >= 0 ? '+' : ''}${pct != null ? pct.toFixed(2) : '--'}%)`;
+  return `${sign}${Math.abs(v).toFixed(2)} (${v >= 0 ? '+' : ''}${pct.toFixed(2)}%)`;
 };
 const fmtNum = (v, dec=2) => v == null ? '--' : parseFloat(v).toFixed(dec);
 const colorOf = v => v == null ? '' : v >= 0 ? 'c-green' : 'c-red';
@@ -649,7 +646,7 @@ function renderMarket(market) {
       <div class="mcard-accent" style="background:var(${cfg.color})"></div>
       <div class="mcard-label">${cfg.label}</div>
       <div class="mcard-val ${chgClass}">${d.price.toLocaleString('en', {maximumFractionDigits:2})}</div>
-      <div class="mcard-chg ${chgClass}">${sign}${Math.abs(d.change).toFixed(2)} (${d.changePct != null ? d.changePct.toFixed(2) : '--'}%)</div>
+      <div class="mcard-chg ${chgClass}">${sign}${Math.abs(d.change).toFixed(2)} (${d.changePct.toFixed(2)}%)</div>
       ${vixNote?`<div class="mcard-sub">${vixNote}</div>`:''}
     </div>`;
   }).join('');
@@ -673,9 +670,32 @@ function switchStock(sym) {
 }
 
 // ─── 單股詳細資料 ─────────────────────────────
+function clearIndicators() {
+  const els = ['kv','dv','dif-v','macd-v','osc-v','rsi6-v','rsi12-v','rsi24-v','bb-up','bb-mid','bb-low'];
+  els.forEach(id => { const el = document.getElementById(id); if(el) { el.textContent='--'; el.className='ind-val'; } });
+  ['kd-sig','macd-sig','bb-sig'].forEach(id => { const el = document.getElementById(id); if(el) { el.textContent='--'; el.className='sig sig-hold'; } });
+  document.getElementById('kd-gauge').style.width = '50%';
+  document.getElementById('rsi-gauge').style.width = '50%';
+  document.getElementById('vol-ratio-badge').textContent = '量比 --';
+  document.getElementById('cur-price').textContent = '--';
+  document.getElementById('cur-chg').textContent = '--';
+  document.getElementById('ma-section').innerHTML = '<div style="color:var(--t3);font-size:11px">無資料</div>';
+  document.getElementById('score-num').textContent = '--';
+  document.getElementById('score-chips').innerHTML = '';
+  document.getElementById('score-verdict').textContent = '--';
+  document.getElementById('risk-section').innerHTML = '<div style="color:var(--t3);font-size:11px">無資料</div>';
+  document.getElementById('vol-section').innerHTML = '<div style="color:var(--t3);font-size:11px">無資料</div>';
+  document.getElementById('checklist-section').innerHTML = '<div style="color:var(--t3);font-size:11px">無資料</div>';
+  document.getElementById('fund-section').innerHTML = '<div style="color:var(--t3);font-size:11px">無資料</div>';
+}
+
 function renderStockDetail(sym) {
   const d = DATA.stocks?.[sym];
-  if (!d) { document.getElementById('cur-stock-label').textContent = sym + '（無資料）'; return; }
+  if (!d) {
+    document.getElementById('cur-stock-label').textContent = sym + '（無資料）';
+    clearIndicators();
+    return;
+  }
   const ind = d.indicators;
   document.getElementById('cur-stock-label').textContent = `${sym} ${d.name || ''}`;
   document.getElementById('cur-price').textContent = d.price?.toFixed(2) || '--';
