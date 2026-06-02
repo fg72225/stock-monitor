@@ -5,27 +5,27 @@
       "name": "Sunplus Technology Company Limited",
       "currency": "TWD",
       "exchange": "TAI",
-      "price": 28.7,
+      "price": 28.65,
       "prevClose": 20.3,
-      "change": 8.4,
-      "changePct": 41.38,
+      "change": 8.35,
+      "changePct": 41.13,
       "indicators": {
-        "K": 55.29,
-        "D": 66.2,
+        "K": 55.02,
+        "D": 66.11,
         "kdSignal": "hold",
-        "dif": 1.65,
+        "dif": 1.64,
         "macd": 1.59,
         "osc": 0.06,
         "macdSignal": "bullish",
-        "rsi6": 40.51,
-        "rsi12": 67.84,
-        "rsi24": 66.67,
-        "ma5": 29.89,
+        "rsi6": 40,
+        "rsi12": 67.54,
+        "rsi24": 66.46,
+        "ma5": 29.88,
         "ma20": 27.39,
         "ma60": 23.69,
         "ma120": 22.54,
         "maArrangement": "bull",
-        "bbUpper": 32.15,
+        "bbUpper": 32.14,
         "bbMid": 27.39,
         "bbLower": 22.63,
         "bbSignal": "upper_half",
@@ -92,7 +92,7 @@
             30.05,
             30,
             29.65,
-            28.7
+            28.65
           ],
           "volumes": [
             1437188,
@@ -154,7 +154,7 @@
             18449334,
             11168697,
             11079318,
-            8572120
+            8613722
           ],
           "dates": [
             "2026-03-06",
@@ -446,9 +446,9 @@
   "market": {
     "^TWII": {
       "name": "台股 TAIEX",
-      "price": 45185.23,
+      "price": 45283.74,
       "prevClose": 0,
-      "change": 45185.23,
+      "change": 45283.74,
       "changePct": null
     },
     "^GSPC": {
@@ -473,5 +473,5 @@
       "changePct": null
     }
   },
-  "updatedAt": "2026-06-02T04:09:23.099Z"
+  "updatedAt": "2026-06-02T04:14:50.397Z"
 }
