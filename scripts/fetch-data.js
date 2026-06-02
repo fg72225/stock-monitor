@@ -33,15 +33,22 @@ async function fetchYahoo(symbol) {
     close:  parseFloat((quotes.close[i]  || 0).toFixed(2)),
     volume: Math.round(quotes.volume[i]  || 0)
   })).filter(d => d.close > 0);
+  const price     = parseFloat((meta.regularMarketPrice || 0).toFixed(2));
+  // 優先用 API 的 prevClose，若為 0 則改用歷史資料倒數第二天收盤價
+  const apiPrev   = meta.chartPreviousClose || meta.regularMarketPreviousClose || meta.previousClose || 0;
+  const histPrev  = ohlcv.length >= 2 ? ohlcv[ohlcv.length - 2].close : 0;
+  const prevClose = parseFloat((apiPrev > 0 ? apiPrev : histPrev).toFixed(2));
+  const change    = parseFloat((price - prevClose).toFixed(2));
+  const changePct = prevClose > 0 ? parseFloat(((change / prevClose) * 100).toFixed(2)) : null;
   return {
     symbol,
     name:      meta.longName || meta.shortName || symbol,
     currency:  meta.currency || 'TWD',
     exchange:  meta.exchangeName || '',
-    price:     parseFloat((meta.regularMarketPrice || 0).toFixed(2)),
-    prevClose: parseFloat((meta.previousClose      || 0).toFixed(2)),
-    change:    parseFloat(((meta.regularMarketPrice || 0) - (meta.previousClose || 0)).toFixed(2)),
-    changePct: parseFloat((((meta.regularMarketPrice - meta.previousClose) / meta.previousClose) * 100).toFixed(2)),
+    price,
+    prevClose,
+    change,
+    changePct,
     ohlcv
   };
 }
