@@ -34,10 +34,16 @@ async function fetchYahoo(symbol) {
     volume: Math.round(quotes.volume[i]  || 0)
   })).filter(d => d.close > 0);
   const price     = parseFloat((meta.regularMarketPrice || 0).toFixed(2));
-  // 優先用 API 的 prevClose，若為 0 則改用歷史資料最後一筆（上個交易日）收盤價
-  const apiPrev   = meta.chartPreviousClose || meta.regularMarketPreviousClose || meta.previousClose || 0;
-  const histPrev  = ohlcv.length >= 1 ? ohlcv[ohlcv.length - 1].close : 0;
-  const prevClose = parseFloat((apiPrev > 0 ? apiPrev : histPrev).toFixed(2));
+  // 用 5d 資料取昨日收盤：最後一筆若等於今日價格則取倒數第二筆，否則取最後一筆
+  const res5d = await axios.get(
+    `https://query1.finance.yahoo.com/v8/finance/chart/${twSymbol}?interval=1d&range=5d`,
+    { headers: { 'User-Agent': 'Mozilla/5.0' }, timeout: 10000 }
+  );
+  const closes5d = (res5d.data?.chart?.result?.[0]?.indicators?.quote?.[0]?.close || []).filter(v => v != null);
+  const last5d   = closes5d[closes5d.length - 1] || 0;
+  const prev5d   = closes5d.length >= 2 ? closes5d[closes5d.length - 2] : last5d;
+  const histPrev = Math.abs(last5d - price) < 0.01 ? prev5d : last5d;
+  const prevClose = parseFloat(histPrev.toFixed(2));
   const change    = parseFloat((price - prevClose).toFixed(2));
   const changePct = prevClose > 0 ? parseFloat(((change / prevClose) * 100).toFixed(2)) : null;
   return {
@@ -65,9 +71,10 @@ async function fetchIndex(symbol, name) {
   const meta   = result.meta;
   const closes = (result.indicators?.quote?.[0]?.close || []).filter(v => v != null);
   const price    = parseFloat((meta.regularMarketPrice || 0).toFixed(2));
-  const apiPrev  = meta.chartPreviousClose || meta.regularMarketPreviousClose || meta.previousClose || 0;
-  const histPrev = closes.length >= 1 ? closes[closes.length - 1] : 0;
-  const prevClose = parseFloat((apiPrev > 0 ? apiPrev : histPrev).toFixed(2));
+  const last5d   = closes[closes.length - 1] || 0;
+  const prev5d   = closes.length >= 2 ? closes[closes.length - 2] : last5d;
+  const histPrev = Math.abs(last5d - price) < 0.01 ? prev5d : last5d;
+  const prevClose = parseFloat(histPrev.toFixed(2));
   const change    = parseFloat((price - prevClose).toFixed(2));
   const changePct = prevClose > 0 ? parseFloat(((change / prevClose) * 100).toFixed(2)) : null;
   return { name, price, prevClose, change, changePct };
