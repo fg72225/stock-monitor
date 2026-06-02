@@ -5,31 +5,31 @@
       "name": "Sunplus Technology Company Limited",
       "currency": "TWD",
       "exchange": "TAI",
-      "price": 28.65,
+      "price": 28.75,
       "prevClose": 20.3,
-      "change": 8.35,
-      "changePct": 41.13,
+      "change": 8.45,
+      "changePct": 41.63,
       "indicators": {
-        "K": 55.02,
-        "D": 66.11,
+        "K": 55.55,
+        "D": 66.29,
         "kdSignal": "hold",
-        "dif": 1.64,
+        "dif": 1.65,
         "macd": 1.59,
         "osc": 0.06,
         "macdSignal": "bullish",
-        "rsi6": 40,
-        "rsi12": 67.54,
-        "rsi24": 66.46,
-        "ma5": 29.88,
+        "rsi6": 41.03,
+        "rsi12": 68.14,
+        "rsi24": 66.88,
+        "ma5": 29.9,
         "ma20": 27.39,
         "ma60": 23.69,
         "ma120": 22.54,
         "maArrangement": "bull",
-        "bbUpper": 32.14,
+        "bbUpper": 32.15,
         "bbMid": 27.39,
         "bbLower": 22.63,
         "bbSignal": "upper_half",
-        "volRatio": 0.46,
+        "volRatio": 0.47,
         "score": 68,
         "history": {
           "closes": [
@@ -92,7 +92,7 @@
             30.05,
             30,
             29.65,
-            28.65
+            28.75
           ],
           "volumes": [
             1437188,
@@ -154,7 +154,7 @@
             18449334,
             11168697,
             11079318,
-            8613722
+            8741272
           ],
           "dates": [
             "2026-03-06",
@@ -446,32 +446,32 @@
   "market": {
     "^TWII": {
       "name": "台股 TAIEX",
-      "price": 45283.74,
-      "prevClose": 0,
-      "change": 45283.74,
-      "changePct": null
+      "price": 45274.95,
+      "prevClose": 44256.8,
+      "change": 1018.15,
+      "changePct": 2.3
     },
     "^GSPC": {
       "name": "S&P 500",
       "price": 7599.96,
-      "prevClose": 0,
-      "change": 7599.96,
-      "changePct": null
+      "prevClose": 7473.47,
+      "change": 126.49,
+      "changePct": 1.69
     },
     "^IXIC": {
       "name": "NASDAQ",
       "price": 27086.81,
-      "prevClose": 0,
-      "change": 27086.81,
-      "changePct": null
+      "prevClose": 26343.97,
+      "change": 742.84,
+      "changePct": 2.82
     },
     "^VIX": {
       "name": "VIX",
       "price": 16.05,
-      "prevClose": 0,
-      "change": 16.05,
-      "changePct": null
+      "prevClose": 17.01,
+      "change": -0.96,
+      "changePct": -5.64
     }
   },
-  "updatedAt": "2026-06-02T04:14:50.397Z"
+  "updatedAt": "2026-06-02T04:20:39.301Z"
 }
