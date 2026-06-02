@@ -33,7 +33,7 @@ jobs:
 
       - name: Fetch stock data
         env:
-          SYMBOLS: ${{ github.event.inputs.symbols || '6467,2401,TSLA' }}
+          SYMBOLS: ${{ github.event.inputs.symbols || '2401,TSLA' }}
         run: node scripts/fetch-data.js
 
       - name: Commit and push data
