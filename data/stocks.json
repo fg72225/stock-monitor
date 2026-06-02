@@ -6,9 +6,9 @@
       "currency": "TWD",
       "exchange": "TAI",
       "price": 28.75,
-      "prevClose": 20.3,
-      "change": 8.45,
-      "changePct": 41.63,
+      "prevClose": 29.65,
+      "change": -0.9,
+      "changePct": -3.04,
       "indicators": {
         "K": 55.55,
         "D": 66.29,
@@ -154,7 +154,7 @@
             18449334,
             11168697,
             11079318,
-            8741272
+            8769085
           ],
           "dates": [
             "2026-03-06",
@@ -227,9 +227,9 @@
       "currency": "USD",
       "exchange": "NMS",
       "price": 415.88,
-      "prevClose": 446.74,
-      "change": -30.86,
-      "changePct": -6.91,
+      "prevClose": 435.79,
+      "change": -19.91,
+      "changePct": -4.57,
       "indicators": {
         "K": 64.63,
         "D": 65.62,
@@ -446,32 +446,32 @@
   "market": {
     "^TWII": {
       "name": "台股 TAIEX",
-      "price": 45274.95,
-      "prevClose": 44256.8,
-      "change": 1018.15,
-      "changePct": 2.3
+      "price": 45396.49,
+      "prevClose": 45337.91,
+      "change": 58.58,
+      "changePct": 0.13
     },
     "^GSPC": {
       "name": "S&P 500",
       "price": 7599.96,
-      "prevClose": 7473.47,
-      "change": 126.49,
-      "changePct": 1.69
+      "prevClose": 7580.06,
+      "change": 19.9,
+      "changePct": 0.26
     },
     "^IXIC": {
       "name": "NASDAQ",
       "price": 27086.81,
-      "prevClose": 26343.97,
-      "change": 742.84,
-      "changePct": 2.82
+      "prevClose": 26972.62,
+      "change": 114.19,
+      "changePct": 0.42
     },
     "^VIX": {
       "name": "VIX",
       "price": 16.05,
-      "prevClose": 17.01,
-      "change": -0.96,
-      "changePct": -5.64
+      "prevClose": 15.32,
+      "change": 0.73,
+      "changePct": 4.77
     }
   },
-  "updatedAt": "2026-06-02T04:20:39.301Z"
+  "updatedAt": "2026-06-02T04:26:39.331Z"
 }
