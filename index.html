@@ -594,7 +594,10 @@ button{cursor:pointer;font-family:inherit;outline:none}
 //  dashboard.js — 主控制器
 // ════════════════════════════════════════════
 
-const DEFAULT_SYMBOLS = ['6467','2401','TSLA'];
+const DEFAULT_SYMBOLS = ['2401','3481','TSLA'];
+// 清除舊版含 6467 的快取，強制套用新預設清單
+const _cached = JSON.parse(localStorage.getItem('stock-symbols') || 'null');
+if (_cached && _cached.includes('6467')) { localStorage.removeItem('stock-symbols'); }
 let SYMBOLS  = JSON.parse(localStorage.getItem('stock-symbols') || 'null') || [...DEFAULT_SYMBOLS];
 let DATA     = {};
 let CUR_SYM  = SYMBOLS[0];
