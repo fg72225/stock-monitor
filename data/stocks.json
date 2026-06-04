@@ -688,11 +688,11 @@
     },
     "^VIX": {
       "name": "VIX",
-      "price": 16.06,
-      "prevClose": 15.77,
-      "change": 0.29,
-      "changePct": 1.84
+      "price": 16.53,
+      "prevClose": 16.06,
+      "change": 0.47,
+      "changePct": 2.93
     }
   },
-  "updatedAt": "2026-06-04T05:53:31.560Z"
+  "updatedAt": "2026-06-04T12:26:10.102Z"
 }
