@@ -29,7 +29,7 @@
         "bbMid": 27.84,
         "bbLower": 23.32,
         "bbSignal": "lower_half",
-        "volRatio": 0.82,
+        "volRatio": 0.92,
         "score": 50,
         "history": {
           "closes": [
@@ -154,7 +154,7 @@
             6783727,
             7009159,
             6256995,
-            7013120
+            7890246
           ],
           "dates": [
             "2026-03-12",
@@ -250,7 +250,7 @@
         "bbMid": 45.74,
         "bbLower": 30.06,
         "bbSignal": "upper_half",
-        "volRatio": 0.14,
+        "volRatio": 0.15,
         "score": 68,
         "history": {
           "closes": [
@@ -375,7 +375,7 @@
             932910345,
             167957518,
             171208516,
-            83505383
+            88193946
           ],
           "dates": [
             "2026-03-12",
@@ -447,35 +447,34 @@
       "name": "Tesla, Inc.",
       "currency": "USD",
       "exchange": "NMS",
-      "price": 391,
-      "prevClose": 418.45,
-      "change": -27.45,
-      "changePct": -6.56,
+      "price": 399.22,
+      "prevClose": 399.19,
+      "change": 0.03,
+      "changePct": 0.01,
       "indicators": {
-        "K": 26.78,
-        "D": 43.4,
+        "K": 24.07,
+        "D": 36.95,
         "kdSignal": "hold",
-        "dif": 4.14,
-        "macd": 8.6,
-        "osc": -4.46,
+        "dif": 2.25,
+        "macd": 7.33,
+        "osc": -5.08,
         "macdSignal": "bearish",
-        "rsi6": 11.76,
-        "rsi12": 43.75,
-        "rsi24": 50.04,
-        "ma5": 414.55,
-        "ma20": 425.87,
-        "ma60": 393.94,
-        "ma120": 413.23,
+        "rsi6": 23.4,
+        "rsi12": 40.97,
+        "rsi24": 51.42,
+        "ma5": 411.22,
+        "ma20": 424.42,
+        "ma60": 394.01,
+        "ma120": 412.73,
         "maArrangement": "neutral",
-        "bbUpper": 454.15,
-        "bbMid": 425.87,
-        "bbLower": 397.59,
-        "bbSignal": "below_lower",
-        "volRatio": 1.52,
-        "score": 54,
+        "bbUpper": 454.94,
+        "bbMid": 424.42,
+        "bbLower": 393.89,
+        "bbSignal": "lower_half",
+        "volRatio": 0.13,
+        "score": 37,
         "history": {
           "closes": [
-            395.01,
             391.2,
             395.56,
             399.27,
@@ -534,10 +533,10 @@
             423.74,
             423.7,
             418.45,
-            391
+            391,
+            399.22
           ],
           "volumes": [
-            60973800,
             58504100,
             58068300,
             46890500,
@@ -596,10 +595,10 @@
             37596000,
             44500700,
             35323300,
-            63128800
+            63128800,
+            5974996
           ],
           "dates": [
-            "2026-03-12",
             "2026-03-13",
             "2026-03-16",
             "2026-03-17",
@@ -658,7 +657,8 @@
             "2026-06-02",
             "2026-06-03",
             "2026-06-04",
-            "2026-06-05"
+            "2026-06-05",
+            "2026-06-08"
           ]
         }
       }
@@ -667,32 +667,32 @@
   "market": {
     "^TWII": {
       "name": "台股 TAIEX",
-      "price": 43628.1,
+      "price": 43502.78,
       "prevClose": 45070.94,
-      "change": -1442.84,
-      "changePct": -3.2
+      "change": -1568.16,
+      "changePct": -3.48
     },
     "^GSPC": {
       "name": "S&P 500",
-      "price": 7383.74,
-      "prevClose": 7584.31,
-      "change": -200.57,
-      "changePct": -2.64
+      "price": 7439.22,
+      "prevClose": 7383.74,
+      "change": 55.48,
+      "changePct": 0.75
     },
     "^IXIC": {
       "name": "NASDAQ",
-      "price": 25709.43,
-      "prevClose": 26830.96,
-      "change": -1121.53,
-      "changePct": -4.18
+      "price": 25997.81,
+      "prevClose": 25709.43,
+      "change": 288.38,
+      "changePct": 1.12
     },
     "^VIX": {
       "name": "VIX",
-      "price": 21.51,
-      "prevClose": 15.4,
-      "change": 6.11,
-      "changePct": 39.68
+      "price": 19.06,
+      "prevClose": 21.51,
+      "change": -2.45,
+      "changePct": -11.39
     }
   },
-  "updatedAt": "2026-06-08T05:28:01.303Z"
+  "updatedAt": "2026-06-08T13:49:45.731Z"
 }
