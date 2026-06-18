@@ -667,10 +667,10 @@
   "market": {
     "^TWII": {
       "name": "台股 TAIEX",
-      "price": 46425.52,
+      "price": 46465.2,
       "prevClose": 45877.39,
-      "change": 548.13,
-      "changePct": 1.19
+      "change": 587.81,
+      "changePct": 1.28
     },
     "^GSPC": {
       "name": "S&P 500",
@@ -688,11 +688,11 @@
     },
     "^VIX": {
       "name": "VIX",
-      "price": 18.44,
-      "prevClose": 16.41,
-      "change": 2.03,
-      "changePct": 12.37
+      "price": 17.3,
+      "prevClose": 18.44,
+      "change": -1.14,
+      "changePct": -6.18
     }
   },
-  "updatedAt": "2026-06-18T05:52:13.793Z"
+  "updatedAt": "2026-06-18T12:36:20.642Z"
 }
