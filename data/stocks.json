@@ -447,35 +447,34 @@
       "name": "Tesla, Inc.",
       "currency": "USD",
       "exchange": "NMS",
-      "price": 400.49,
-      "prevClose": 396.38,
-      "change": 4.11,
-      "changePct": 1.04,
+      "price": 408.46,
+      "prevClose": 408.4,
+      "change": 0.06,
+      "changePct": 0.01,
       "indicators": {
-        "K": 45.8,
-        "D": 41.16,
+        "K": 55.14,
+        "D": 45.82,
         "kdSignal": "hold",
-        "dif": -2.85,
-        "macd": -0.51,
-        "osc": -2.34,
+        "dif": -2.36,
+        "macd": -0.88,
+        "osc": -1.49,
         "macdSignal": "bearish",
-        "rsi6": 69.51,
-        "rsi12": 40.81,
-        "rsi24": 41,
-        "ma5": 403.82,
-        "ma20": 413.7,
-        "ma60": 395.93,
-        "ma120": 407.31,
+        "rsi6": 61.98,
+        "rsi12": 44.33,
+        "rsi24": 46.93,
+        "ma5": 404.23,
+        "ma20": 413.23,
+        "ma60": 396.31,
+        "ma120": 406.75,
         "maArrangement": "neutral",
-        "bbUpper": 446.81,
-        "bbMid": 413.7,
-        "bbLower": 380.58,
+        "bbUpper": 446.36,
+        "bbMid": 413.23,
+        "bbLower": 380.09,
         "bbSignal": "lower_half",
-        "volRatio": 1.23,
-        "score": 45,
+        "volRatio": 0.41,
+        "score": 40,
         "history": {
           "closes": [
-            385.95,
             372.11,
             361.83,
             355.28,
@@ -534,10 +533,10 @@
             411.15,
             404.66,
             396.38,
-            400.49
+            400.49,
+            408.46
           ],
           "volumes": [
-            55157300,
             55522900,
             62065700,
             67954400,
@@ -596,10 +595,10 @@
             45620500,
             40255500,
             43534300,
-            58384700
+            58384700,
+            20430814
           ],
           "dates": [
-            "2026-03-25",
             "2026-03-26",
             "2026-03-27",
             "2026-03-30",
@@ -658,7 +657,8 @@
             "2026-06-15",
             "2026-06-16",
             "2026-06-17",
-            "2026-06-18"
+            "2026-06-18",
+            "2026-06-22"
           ]
         }
       }
@@ -674,25 +674,25 @@
     },
     "^GSPC": {
       "name": "S&P 500",
-      "price": 7500.58,
-      "prevClose": 7420.1,
-      "change": 80.48,
-      "changePct": 1.08
+      "price": 7481.98,
+      "prevClose": 7500.58,
+      "change": -18.6,
+      "changePct": -0.25
     },
     "^IXIC": {
       "name": "NASDAQ",
-      "price": 26517.93,
-      "prevClose": 26021.66,
-      "change": 496.27,
-      "changePct": 1.91
+      "price": 26261.29,
+      "prevClose": 26517.93,
+      "change": -256.64,
+      "changePct": -0.97
     },
     "^VIX": {
       "name": "VIX",
-      "price": 16.78,
+      "price": 17.54,
       "prevClose": 16.4,
-      "change": 0.38,
-      "changePct": 2.32
+      "change": 1.14,
+      "changePct": 6.95
     }
   },
-  "updatedAt": "2026-06-22T06:24:56.673Z"
+  "updatedAt": "2026-06-22T15:03:21.133Z"
 }
