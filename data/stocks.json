@@ -5,31 +5,31 @@
       "name": "Sunplus Technology Company Limited",
       "currency": "TWD",
       "exchange": "TAI",
-      "price": 29.75,
+      "price": 31.2,
       "prevClose": 31.9,
-      "change": -2.15,
-      "changePct": -6.74,
+      "change": -0.7,
+      "changePct": -2.19,
       "indicators": {
-        "K": 23.94,
-        "D": 32.54,
+        "K": 31.86,
+        "D": 35.18,
         "kdSignal": "hold",
-        "dif": 0.67,
-        "macd": 1.08,
-        "osc": -0.41,
+        "dif": 0.79,
+        "macd": 1.11,
+        "osc": -0.32,
         "macdSignal": "bearish",
-        "rsi6": 27.13,
-        "rsi12": 42.28,
-        "rsi24": 55.41,
-        "ma5": 31.93,
-        "ma20": 32.42,
-        "ma60": 28.6,
-        "ma120": 25.13,
+        "rsi6": 35,
+        "rsi12": 47.93,
+        "rsi24": 58.22,
+        "ma5": 32.22,
+        "ma20": 32.49,
+        "ma60": 28.62,
+        "ma120": 25.14,
         "maArrangement": "neutral",
-        "bbUpper": 35.1,
-        "bbMid": 32.42,
-        "bbLower": 29.73,
+        "bbUpper": 34.95,
+        "bbMid": 32.49,
+        "bbLower": 30.03,
         "bbSignal": "lower_half",
-        "volRatio": 0.85,
+        "volRatio": 1.15,
         "score": 42,
         "history": {
           "closes": [
@@ -92,7 +92,7 @@
             33,
             33,
             31.9,
-            29.75
+            31.2
           ],
           "volumes": [
             28405428,
@@ -154,7 +154,7 @@
             12923756,
             0,
             11596441,
-            6401965
+            8712295
           ],
           "dates": [
             "2026-04-20",
@@ -226,31 +226,31 @@
       "name": "Innolux Corporation",
       "currency": "TWD",
       "exchange": "TAI",
-      "price": 55.2,
+      "price": 57.2,
       "prevClose": 61,
-      "change": -5.8,
-      "changePct": -9.51,
+      "change": -3.8,
+      "changePct": -6.23,
       "indicators": {
-        "K": 15.63,
-        "D": 27.79,
+        "K": 19.48,
+        "D": 29.08,
         "kdSignal": "oversold",
-        "dif": 2.74,
-        "macd": 4.66,
-        "osc": -1.92,
+        "dif": 2.9,
+        "macd": 4.69,
+        "osc": -1.79,
         "macdSignal": "bearish",
-        "rsi6": 6.79,
-        "rsi12": 31.3,
-        "rsi24": 54.8,
-        "ma5": 62.4,
-        "ma20": 64.78,
-        "ma60": 47.4,
-        "ma120": 36.68,
+        "rsi6": 7.75,
+        "rsi12": 33.88,
+        "rsi24": 56.59,
+        "ma5": 62.8,
+        "ma20": 64.89,
+        "ma60": 47.44,
+        "ma120": 36.7,
         "maArrangement": "neutral",
-        "bbUpper": 73.68,
-        "bbMid": 64.78,
-        "bbLower": 55.89,
-        "bbSignal": "below_lower",
-        "volRatio": 1.08,
+        "bbUpper": 73.38,
+        "bbMid": 64.89,
+        "bbLower": 56.39,
+        "bbSignal": "lower_half",
+        "volRatio": 1.33,
         "score": 50,
         "history": {
           "closes": [
@@ -313,7 +313,7 @@
             65.3,
             65.3,
             61,
-            55.2
+            57.2
           ],
           "volumes": [
             215965345,
@@ -375,7 +375,7 @@
             379401297,
             0,
             395114769,
-            413353752
+            509301140
           ],
           "dates": [
             "2026-04-20",
@@ -596,7 +596,7 @@
             33844900,
             37835000,
             33410000,
-            32685743
+            32729700
           ],
           "dates": [
             "2026-04-16",
@@ -667,10 +667,10 @@
   "market": {
     "^TWII": {
       "name": "台股 TAIEX",
-      "price": 43850.99,
+      "price": 44737.95,
       "prevClose": 45380.52,
-      "change": -1529.53,
-      "changePct": -3.37
+      "change": -642.57,
+      "changePct": -1.42
     },
     "^GSPC": {
       "name": "S&P 500",
@@ -688,11 +688,11 @@
     },
     "^VIX": {
       "name": "VIX",
-      "price": 17.16,
-      "prevClose": 15.03,
-      "change": 2.13,
-      "changePct": 14.17
+      "price": 17.33,
+      "prevClose": 17.16,
+      "change": 0.17,
+      "changePct": 0.99
     }
   },
-  "updatedAt": "2026-07-14T03:53:38.226Z"
+  "updatedAt": "2026-07-14T11:03:24.849Z"
 }
