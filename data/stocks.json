@@ -5,31 +5,31 @@
       "name": "Sunplus Technology Company Limited",
       "currency": "TWD",
       "exchange": "TAI",
-      "price": 28.15,
+      "price": 28.2,
       "prevClose": 29.9,
-      "change": -1.75,
-      "changePct": -5.85,
+      "change": -1.7,
+      "changePct": -5.69,
       "indicators": {
-        "K": 31.41,
-        "D": 26.43,
+        "K": 31.61,
+        "D": 26.5,
         "kdSignal": "hold",
-        "dif": -0.57,
+        "dif": -0.56,
         "macd": 0.02,
-        "osc": -0.59,
+        "osc": -0.58,
         "macdSignal": "bearish",
-        "rsi6": 34.83,
-        "rsi12": 38.6,
-        "rsi24": 42.98,
-        "ma5": 27.89,
-        "ma20": 30.97,
+        "rsi6": 35,
+        "rsi12": 38.75,
+        "rsi24": 43.05,
+        "ma5": 27.9,
+        "ma20": 30.98,
         "ma60": 29.1,
         "ma120": 25.52,
         "maArrangement": "neutral",
         "bbUpper": 35.14,
-        "bbMid": 30.97,
-        "bbLower": 26.8,
+        "bbMid": 30.98,
+        "bbLower": 26.81,
         "bbSignal": "lower_half",
-        "volRatio": 0.84,
+        "volRatio": 1.16,
         "score": 42,
         "history": {
           "closes": [
@@ -92,7 +92,7 @@
             26.4,
             27.6,
             29.9,
-            28.15
+            28.2
           ],
           "volumes": [
             3021013,
@@ -154,7 +154,7 @@
             5290563,
             2993905,
             8984426,
-            4853377
+            6725360
           ],
           "dates": [
             "2026-04-29",
@@ -226,31 +226,31 @@
       "name": "Innolux Corporation",
       "currency": "TWD",
       "exchange": "TAI",
-      "price": 51.7,
+      "price": 51.9,
       "prevClose": 52.5,
-      "change": -0.8,
-      "changePct": -1.52,
+      "change": -0.6,
+      "changePct": -1.14,
       "indicators": {
-        "K": 13.31,
-        "D": 13.6,
+        "K": 13.68,
+        "D": 13.72,
         "kdSignal": "oversold",
-        "dif": -1.37,
+        "dif": -1.36,
         "macd": 0.75,
-        "osc": -2.12,
+        "osc": -2.11,
         "macdSignal": "bearish",
-        "rsi6": 19.09,
-        "rsi12": 20.93,
-        "rsi24": 37.01,
-        "ma5": 51.58,
-        "ma20": 61.14,
+        "rsi6": 19.44,
+        "rsi12": 21.13,
+        "rsi24": 37.17,
+        "ma5": 51.62,
+        "ma20": 61.15,
         "ma60": 50.77,
         "ma120": 38.32,
         "maArrangement": "neutral",
-        "bbUpper": 74.06,
-        "bbMid": 61.14,
-        "bbLower": 48.22,
+        "bbUpper": 74.04,
+        "bbMid": 61.15,
+        "bbLower": 48.26,
         "bbSignal": "lower_half",
-        "volRatio": 0.54,
+        "volRatio": 0.75,
         "score": 50,
         "history": {
           "closes": [
@@ -313,7 +313,7 @@
             50.4,
             50.7,
             52.5,
-            51.7
+            51.9
           ],
           "volumes": [
             132419855,
@@ -375,7 +375,7 @@
             363939822,
             315238369,
             287579960,
-            168218258
+            231123181
           ],
           "dates": [
             "2026-04-29",
@@ -667,10 +667,10 @@
   "market": {
     "^TWII": {
       "name": "台股 TAIEX",
-      "price": 44564.37,
+      "price": 44850.81,
       "prevClose": 44825.78,
-      "change": -261.41,
-      "changePct": -0.58
+      "change": 25.03,
+      "changePct": 0.06
     },
     "^GSPC": {
       "name": "S&P 500",
@@ -688,11 +688,11 @@
     },
     "^VIX": {
       "name": "VIX",
-      "price": 16.64,
-      "prevClose": 17.05,
-      "change": -0.41,
-      "changePct": -2.4
+      "price": 17.71,
+      "prevClose": 16.64,
+      "change": 1.07,
+      "changePct": 6.43
     }
   },
-  "updatedAt": "2026-07-23T04:11:26.553Z"
+  "updatedAt": "2026-07-23T11:22:35.711Z"
 }
