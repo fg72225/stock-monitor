@@ -5,32 +5,32 @@
       "name": "Sunplus Technology Company Limited",
       "currency": "TWD",
       "exchange": "TAI",
-      "price": 27.15,
+      "price": 27.45,
       "prevClose": 28.15,
-      "change": -1,
-      "changePct": -3.55,
+      "change": -0.7,
+      "changePct": -2.49,
       "indicators": {
-        "K": 31.37,
-        "D": 29.71,
+        "K": 32.82,
+        "D": 30.2,
         "kdSignal": "hold",
-        "dif": -0.77,
+        "dif": -0.75,
         "macd": -0.24,
-        "osc": -0.53,
+        "osc": -0.51,
         "macdSignal": "bearish",
-        "rsi6": 48.28,
-        "rsi12": 27.24,
-        "rsi24": 39.63,
-        "ma5": 28.2,
-        "ma20": 30.59,
-        "ma60": 29.23,
+        "rsi6": 50.36,
+        "rsi12": 27.89,
+        "rsi24": 40.07,
+        "ma5": 28.26,
+        "ma20": 30.6,
+        "ma60": 29.24,
         "ma120": 25.6,
         "maArrangement": "neutral",
-        "bbUpper": 35.18,
-        "bbMid": 30.59,
-        "bbLower": 25.99,
+        "bbUpper": 35.16,
+        "bbMid": 30.6,
+        "bbLower": 26.05,
         "bbSignal": "lower_half",
-        "volRatio": 0.4,
-        "score": 37,
+        "volRatio": 0.53,
+        "score": 45,
         "history": {
           "closes": [
             25.3,
@@ -92,7 +92,7 @@
             29.9,
             28.2,
             28.15,
-            27.15
+            27.45
           ],
           "volumes": [
             15171301,
@@ -154,7 +154,7 @@
             8984426,
             6690192,
             4008360,
-            2249787
+            2984378
           ],
           "dates": [
             "2026-05-04",
@@ -226,32 +226,32 @@
       "name": "Innolux Corporation",
       "currency": "TWD",
       "exchange": "TAI",
-      "price": 45.95,
+      "price": 47.35,
       "prevClose": 49.5,
-      "change": -3.55,
-      "changePct": -7.17,
+      "change": -2.15,
+      "changePct": -4.34,
       "indicators": {
-        "K": 7.68,
-        "D": 10.93,
+        "K": 11.11,
+        "D": 12.07,
         "kdSignal": "oversold",
-        "dif": -2.38,
-        "macd": -0.28,
-        "osc": -2.1,
+        "dif": -2.26,
+        "macd": -0.25,
+        "osc": -2.01,
         "macdSignal": "bearish",
-        "rsi6": 19.35,
-        "rsi12": 13,
-        "rsi24": 31.1,
-        "ma5": 50.11,
-        "ma20": 59.32,
-        "ma60": 51.56,
-        "ma120": 38.73,
+        "rsi6": 22.22,
+        "rsi12": 13.74,
+        "rsi24": 31.95,
+        "ma5": 50.39,
+        "ma20": 59.39,
+        "ma60": 51.59,
+        "ma120": 38.74,
         "maArrangement": "neutral",
-        "bbUpper": 74.03,
-        "bbMid": 59.32,
-        "bbLower": 44.61,
+        "bbUpper": 73.86,
+        "bbMid": 59.39,
+        "bbLower": 44.93,
         "bbSignal": "lower_half",
-        "volRatio": 0.98,
-        "score": 50,
+        "volRatio": 1.25,
+        "score": 42,
         "history": {
           "closes": [
             24.8,
@@ -313,7 +313,7 @@
             52.5,
             51.9,
             49.5,
-            45.95
+            47.35
           ],
           "volumes": [
             151787078,
@@ -375,7 +375,7 @@
             287579960,
             230220820,
             202368035,
-            274961915
+            350841042
           ],
           "dates": [
             "2026-05-04",
@@ -452,30 +452,29 @@
       "change": -6.66,
       "changePct": -2.08,
       "indicators": {
-        "K": 10.57,
-        "D": 15.59,
+        "K": 9.22,
+        "D": 13.47,
         "kdSignal": "oversold",
-        "dif": -11.87,
-        "macd": -5.64,
-        "osc": -6.22,
+        "dif": -16.1,
+        "macd": -7.74,
+        "osc": -8.37,
         "macdSignal": "bearish",
-        "rsi6": 10.01,
-        "rsi12": 18.52,
-        "rsi24": 37.05,
-        "ma5": 364.61,
-        "ma20": 391.83,
-        "ma60": 403.92,
-        "ma120": 397.73,
+        "rsi6": 9.67,
+        "rsi12": 18.83,
+        "rsi24": 35.35,
+        "ma5": 351.05,
+        "ma20": 388.72,
+        "ma60": 402.87,
+        "ma120": 396.75,
         "maArrangement": "neutral",
-        "bbUpper": 437.64,
-        "bbMid": 391.83,
-        "bbLower": 346.01,
+        "bbUpper": 445.7,
+        "bbMid": 388.72,
+        "bbLower": 331.75,
         "bbSignal": "below_lower",
-        "volRatio": 3.66,
-        "score": 58,
+        "volRatio": 1.28,
+        "score": 50,
         "history": {
           "closes": [
-            376.02,
             372.8,
             381.63,
             390.82,
@@ -534,10 +533,10 @@
             369.57,
             378.93,
             374.01,
-            319.69
+            319.69,
+            313.03
           ],
           "volumes": [
-            50864400,
             45384800,
             51076000,
             65338300,
@@ -596,10 +595,10 @@
             33901500,
             32735300,
             30646100,
-            115606400
+            115606400,
+            62575300
           ],
           "dates": [
-            "2026-04-28",
             "2026-04-29",
             "2026-04-30",
             "2026-05-01",
@@ -658,7 +657,8 @@
             "2026-07-20",
             "2026-07-21",
             "2026-07-22",
-            "2026-07-23"
+            "2026-07-23",
+            "2026-07-24"
           ]
         }
       }
@@ -667,10 +667,10 @@
   "market": {
     "^TWII": {
       "name": "台股 TAIEX",
-      "price": 43149.07,
-      "prevClose": 44850.81,
-      "change": -1701.74,
-      "changePct": -3.79
+      "price": 43634.19,
+      "prevClose": 43654.84,
+      "change": -20.65,
+      "changePct": -0.05
     },
     "^GSPC": {
       "name": "S&P 500",
@@ -688,11 +688,11 @@
     },
     "^VIX": {
       "name": "VIX",
-      "price": 18.58,
-      "prevClose": 18.7,
-      "change": -0.12,
-      "changePct": -0.64
+      "price": 17.83,
+      "prevClose": 18.58,
+      "change": -0.75,
+      "changePct": -4.04
     }
   },
-  "updatedAt": "2026-07-27T04:33:12.924Z"
+  "updatedAt": "2026-07-27T12:41:21.733Z"
 }
