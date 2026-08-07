@@ -5,22 +5,22 @@
       "name": "Sunplus Technology Company Limited",
       "currency": "TWD",
       "exchange": "TAI",
-      "price": 27,
+      "price": 27.05,
       "prevClose": 27.4,
-      "change": -0.4,
-      "changePct": -1.46,
+      "change": -0.35,
+      "changePct": -1.28,
       "indicators": {
-        "K": 65.18,
-        "D": 50.25,
+        "K": 65.51,
+        "D": 50.36,
         "kdSignal": "hold",
-        "dif": -1.01,
+        "dif": -1,
         "macd": -1.1,
-        "osc": 0.09,
+        "osc": 0.1,
         "macdSignal": "bullish",
-        "rsi6": 85.15,
-        "rsi12": 37.39,
-        "rsi24": 38.51,
-        "ma5": 27.03,
+        "rsi6": 86,
+        "rsi12": 37.55,
+        "rsi24": 38.59,
+        "ma5": 27.04,
         "ma20": 27.64,
         "ma60": 29.33,
         "ma120": 25.88,
@@ -29,8 +29,8 @@
         "bbMid": 27.64,
         "bbLower": 23.15,
         "bbSignal": "lower_half",
-        "volRatio": 0.3,
-        "score": 45,
+        "volRatio": 0.51,
+        "score": 50,
         "history": {
           "closes": [
             24.65,
@@ -92,7 +92,7 @@
             27.15,
             27.75,
             27.4,
-            27
+            27.05
           ],
           "volumes": [
             4537444,
@@ -154,7 +154,7 @@
             3606454,
             3914748,
             2820239,
-            1065497
+            1822341
           ],
           "dates": [
             "2026-05-15",
@@ -226,32 +226,32 @@
       "name": "Innolux Corporation",
       "currency": "TWD",
       "exchange": "TAI",
-      "price": 49.1,
+      "price": 47.55,
       "prevClose": 50,
-      "change": -0.9,
-      "changePct": -1.8,
+      "change": -2.45,
+      "changePct": -4.9,
       "indicators": {
-        "K": 70.19,
-        "D": 50.89,
+        "K": 65.02,
+        "D": 49.16,
         "kdSignal": "hold",
-        "dif": -2.76,
-        "macd": -2.91,
-        "osc": 0.15,
+        "dif": -2.88,
+        "macd": -2.94,
+        "osc": 0.06,
         "macdSignal": "golden_cross",
-        "rsi6": 90.53,
-        "rsi12": 41.75,
-        "rsi24": 28.29,
-        "ma5": 48.1,
-        "ma20": 50.16,
-        "ma60": 53.82,
-        "ma120": 40.45,
+        "rsi6": 77.83,
+        "rsi12": 38.83,
+        "rsi24": 27.38,
+        "ma5": 47.79,
+        "ma20": 50.08,
+        "ma60": 53.8,
+        "ma120": 40.44,
         "maArrangement": "neutral",
-        "bbUpper": 60.52,
-        "bbMid": 50.16,
-        "bbLower": 39.79,
+        "bbUpper": 60.5,
+        "bbMid": 50.08,
+        "bbLower": 39.66,
         "bbSignal": "lower_half",
-        "volRatio": 0.45,
-        "score": 52,
+        "volRatio": 0.75,
+        "score": 68,
         "history": {
           "closes": [
             36.1,
@@ -313,7 +313,7 @@
             47.8,
             47.8,
             50,
-            49.1
+            47.55
           ],
           "volumes": [
             890539034,
@@ -375,7 +375,7 @@
             347055248,
             419588806,
             297686632,
-            162427249
+            270011485
           ],
           "dates": [
             "2026-05-15",
@@ -471,7 +471,7 @@
         "bbMid": 347.29,
         "bbLower": 271.93,
         "bbSignal": "lower_half",
-        "volRatio": 0.72,
+        "volRatio": 0.75,
         "score": 45,
         "history": {
           "closes": [
@@ -596,7 +596,7 @@
             38281400,
             33318300,
             27820800,
-            25143733
+            25965800
           ],
           "dates": [
             "2026-05-12",
@@ -667,10 +667,10 @@
   "market": {
     "^TWII": {
       "name": "台股 TAIEX",
-      "price": 44182.95,
+      "price": 44225.91,
       "prevClose": 44396.7,
-      "change": -213.75,
-      "changePct": -0.48
+      "change": -170.79,
+      "changePct": -0.38
     },
     "^GSPC": {
       "name": "S&P 500",
@@ -688,11 +688,11 @@
     },
     "^VIX": {
       "name": "VIX",
-      "price": 15.15,
-      "prevClose": 15.81,
-      "change": -0.66,
-      "changePct": -4.17
+      "price": 15.28,
+      "prevClose": 15.15,
+      "change": 0.13,
+      "changePct": 0.86
     }
   },
-  "updatedAt": "2026-08-07T03:46:37.839Z"
+  "updatedAt": "2026-08-07T10:23:54.940Z"
 }
