@@ -5,35 +5,34 @@
       "name": "Sunplus Technology Company Limited",
       "currency": "TWD",
       "exchange": "TAI",
-      "price": 25.75,
-      "prevClose": 25.7,
-      "change": 0.05,
-      "changePct": 0.19,
+      "price": 25.7,
+      "prevClose": 25.75,
+      "change": -0.05,
+      "changePct": -0.19,
       "indicators": {
-        "K": 27.48,
-        "D": 37.97,
+        "K": 26.33,
+        "D": 34.09,
         "kdSignal": "hold",
         "dif": -0.77,
         "macd": -0.76,
-        "osc": 0,
-        "macdSignal": "death_cross",
-        "rsi6": 14.55,
-        "rsi12": 37.93,
-        "rsi24": 45.97,
-        "ma5": 26.05,
-        "ma20": 26.48,
-        "ma60": 29.14,
-        "ma120": 26.15,
+        "osc": -0.01,
+        "macdSignal": "bearish",
+        "rsi6": 17.39,
+        "rsi12": 30.48,
+        "rsi24": 48.21,
+        "ma5": 25.83,
+        "ma20": 26.36,
+        "ma60": 29.07,
+        "ma120": 26.18,
         "maArrangement": "neutral",
-        "bbUpper": 29.03,
-        "bbMid": 26.48,
-        "bbLower": 23.93,
+        "bbUpper": 28.81,
+        "bbMid": 26.36,
+        "bbLower": 23.9,
         "bbSignal": "lower_half",
-        "volRatio": 0.57,
-        "score": 43,
+        "volRatio": 0.16,
+        "score": 45,
         "history": {
           "closes": [
-            30.05,
             30,
             29.65,
             28.9,
@@ -92,10 +91,10 @@
             26.65,
             25.35,
             25.7,
-            25.75
+            25.75,
+            25.7
           ],
           "volumes": [
-            18449334,
             11168697,
             11079318,
             11760450,
@@ -154,10 +153,10 @@
             1503431,
             4136274,
             4067263,
-            1960561
+            1953501,
+            483000
           ],
           "dates": [
-            "2026-05-28",
             "2026-05-29",
             "2026-06-01",
             "2026-06-02",
@@ -216,7 +215,8 @@
             "2026-08-17",
             "2026-08-18",
             "2026-08-19",
-            "2026-08-20"
+            "2026-08-20",
+            "2026-08-21"
           ]
         }
       }
@@ -226,35 +226,34 @@
       "name": "Innolux Corporation",
       "currency": "TWD",
       "exchange": "TAI",
-      "price": 46,
-      "prevClose": 46.75,
-      "change": -0.75,
-      "changePct": -1.6,
+      "price": 45.55,
+      "prevClose": 46,
+      "change": -0.45,
+      "changePct": -0.98,
       "indicators": {
-        "K": 34.33,
-        "D": 53.42,
+        "K": 25.18,
+        "D": 44.01,
         "kdSignal": "hold",
-        "dif": -1.48,
-        "macd": -1.68,
-        "osc": 0.2,
+        "dif": -1.63,
+        "macd": -1.67,
+        "osc": 0.04,
         "macdSignal": "bullish",
-        "rsi6": 22.5,
-        "rsi12": 45.48,
-        "rsi24": 42.09,
-        "ma5": 48.71,
-        "ma20": 47.76,
-        "ma60": 54.9,
-        "ma120": 42.11,
+        "rsi6": 24.16,
+        "rsi12": 44.47,
+        "rsi24": 43.93,
+        "ma5": 47.8,
+        "ma20": 47.56,
+        "ma60": 54.89,
+        "ma120": 42.25,
         "maArrangement": "short_bull",
-        "bbUpper": 53.44,
-        "bbMid": 47.76,
-        "bbLower": 42.09,
+        "bbUpper": 53.26,
+        "bbMid": 47.56,
+        "bbLower": 41.87,
         "bbSignal": "lower_half",
-        "volRatio": 0.98,
-        "score": 66,
+        "volRatio": 0.25,
+        "score": 61,
         "history": {
           "closes": [
-            46.4,
             51,
             56.1,
             56.2,
@@ -313,10 +312,10 @@
             51.2,
             49.5,
             46.75,
-            46
+            46,
+            45.55
           ],
           "volumes": [
-            1251494866,
             892395040,
             475515133,
             1155525590,
@@ -375,10 +374,10 @@
             247652860,
             208429823,
             222802280,
-            216814123
+            215416934,
+            56989799
           ],
           "dates": [
-            "2026-05-28",
             "2026-05-29",
             "2026-06-01",
             "2026-06-02",
@@ -437,7 +436,8 @@
             "2026-08-17",
             "2026-08-18",
             "2026-08-19",
-            "2026-08-20"
+            "2026-08-20",
+            "2026-08-21"
           ]
         }
       }
@@ -447,35 +447,34 @@
       "name": "Tesla, Inc.",
       "currency": "USD",
       "exchange": "NMS",
-      "price": 351.12,
-      "prevClose": 336.87,
-      "change": 14.25,
-      "changePct": 4.23,
+      "price": 345.13,
+      "prevClose": 351.12,
+      "change": -5.99,
+      "changePct": -1.71,
       "indicators": {
-        "K": 79.79,
-        "D": 75.96,
-        "kdSignal": "buy",
-        "dif": -6.94,
-        "macd": -12.46,
-        "osc": 5.52,
+        "K": 78.79,
+        "D": 76.91,
+        "kdSignal": "hold",
+        "dif": -5.74,
+        "macd": -11.12,
+        "osc": 5.37,
         "macdSignal": "bullish",
-        "rsi6": 73.05,
-        "rsi12": 71.97,
-        "rsi24": 40.08,
-        "ma5": 341.9,
-        "ma20": 324.38,
-        "ma60": 376.61,
-        "ma120": 383.51,
+        "rsi6": 71.81,
+        "rsi12": 63.31,
+        "rsi24": 40.94,
+        "ma5": 342.94,
+        "ma20": 325.65,
+        "ma60": 375.14,
+        "ma120": 383.03,
         "maArrangement": "short_bull",
-        "bbUpper": 351.23,
-        "bbMid": 324.38,
-        "bbLower": 297.53,
+        "bbUpper": 353.87,
+        "bbMid": 325.65,
+        "bbLower": 297.44,
         "bbSignal": "upper_half",
-        "volRatio": 1.12,
-        "score": 79,
+        "volRatio": 0.9,
+        "score": 69,
         "history": {
           "closes": [
-            433.59,
             440.36,
             442.1,
             435.79,
@@ -534,10 +533,10 @@
             342.27,
             339.3,
             336.87,
-            351.12
+            351.12,
+            345.13
           ],
           "volumes": [
-            45658900,
             44656500,
             32435000,
             45176800,
@@ -596,10 +595,10 @@
             45437100,
             26037100,
             27994500,
-            36613200
+            36735400,
+            30691906
           ],
           "dates": [
-            "2026-05-26",
             "2026-05-27",
             "2026-05-28",
             "2026-05-29",
@@ -658,7 +657,8 @@
             "2026-08-14",
             "2026-08-17",
             "2026-08-18",
-            "2026-08-19"
+            "2026-08-19",
+            "2026-08-20"
           ]
         }
       }
@@ -667,32 +667,32 @@
   "market": {
     "^TWII": {
       "name": "台股 TAIEX",
-      "price": 44933.74,
-      "prevClose": 44719.35,
-      "change": 214.39,
-      "changePct": 0.48
+      "price": 44970.04,
+      "prevClose": 44933.74,
+      "change": 36.3,
+      "changePct": 0.08
     },
     "^GSPC": {
       "name": "S&P 500",
-      "price": 7707.98,
-      "prevClose": 7691.76,
-      "change": 16.22,
-      "changePct": 0.21
+      "price": 7641.16,
+      "prevClose": 7707.98,
+      "change": -66.82,
+      "changePct": -0.87
     },
     "^IXIC": {
       "name": "NASDAQ",
-      "price": 26331.09,
-      "prevClose": 26289.71,
-      "change": 41.38,
-      "changePct": 0.16
+      "price": 26067.17,
+      "prevClose": 26331.09,
+      "change": -263.92,
+      "changePct": -1
     },
     "^VIX": {
       "name": "VIX",
-      "price": 15.21,
+      "price": 16.01,
       "prevClose": 14.89,
-      "change": 0.32,
-      "changePct": 2.15
+      "change": 1.12,
+      "changePct": 7.52
     }
   },
-  "updatedAt": "2026-08-20T09:58:25.371Z"
+  "updatedAt": "2026-08-21T02:20:54.622Z"
 }
