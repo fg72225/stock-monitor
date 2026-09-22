@@ -5,22 +5,22 @@
       "name": "Sunplus Technology Company Limited",
       "currency": "TWD",
       "exchange": "TAI",
-      "price": 25.7,
+      "price": 25.75,
       "prevClose": 26.25,
-      "change": -0.55,
-      "changePct": -2.1,
+      "change": -0.5,
+      "changePct": -1.9,
       "indicators": {
-        "K": 65.49,
-        "D": 50.3,
+        "K": 66.07,
+        "D": 50.49,
         "kdSignal": "hold",
         "dif": -0.31,
         "macd": -0.53,
         "osc": 0.22,
         "macdSignal": "bullish",
-        "rsi6": 70.42,
-        "rsi12": 50,
-        "rsi24": 50,
-        "ma5": 25.31,
+        "rsi6": 71.43,
+        "rsi12": 50.43,
+        "rsi24": 50.26,
+        "ma5": 25.32,
         "ma20": 25.16,
         "ma60": 27.22,
         "ma120": 26.98,
@@ -29,7 +29,7 @@
         "bbMid": 25.16,
         "bbLower": 23.87,
         "bbSignal": "upper_half",
-        "volRatio": 1.18,
+        "volRatio": 1.25,
         "score": 69,
         "history": {
           "closes": [
@@ -92,7 +92,7 @@
             24.75,
             25.45,
             26.25,
-            25.7
+            25.75
           ],
           "volumes": [
             10047010,
@@ -154,7 +154,7 @@
             1369170,
             2902778,
             4826973,
-            2866544
+            3054544
           ],
           "dates": [
             "2026-07-01",
@@ -226,31 +226,31 @@
       "name": "Innolux Corporation",
       "currency": "TWD",
       "exchange": "TAI",
-      "price": 50.6,
+      "price": 50.5,
       "prevClose": 50.4,
-      "change": 0.2,
-      "changePct": 0.4,
+      "change": 0.1,
+      "changePct": 0.2,
       "indicators": {
-        "K": 57.45,
-        "D": 45.63,
+        "K": 56.89,
+        "D": 45.44,
         "kdSignal": "hold",
-        "dif": 0.03,
-        "macd": -0.28,
+        "dif": 0.02,
+        "macd": -0.29,
         "osc": 0.31,
         "macdSignal": "bullish",
-        "rsi6": 76.58,
-        "rsi12": 58.82,
-        "rsi24": 59.19,
-        "ma5": 49.29,
+        "rsi6": 76.15,
+        "rsi12": 58.47,
+        "rsi24": 58.99,
+        "ma5": 49.27,
         "ma20": 48.64,
         "ma60": 51.48,
         "ma120": 46.24,
         "maArrangement": "short_bull",
-        "bbUpper": 51.09,
+        "bbUpper": 51.07,
         "bbMid": 48.64,
-        "bbLower": 46.2,
+        "bbLower": 46.21,
         "bbSignal": "upper_half",
-        "volRatio": 3.35,
+        "volRatio": 3.46,
         "score": 77,
         "history": {
           "closes": [
@@ -313,7 +313,7 @@
             48.5,
             48.25,
             50.4,
-            50.6
+            50.5
           ],
           "volumes": [
             584557798,
@@ -375,7 +375,7 @@
             137619378,
             126376536,
             286391590,
-            486770107
+            502171268
           ],
           "dates": [
             "2026-07-01",
@@ -447,35 +447,34 @@
       "name": "Tesla, Inc.",
       "currency": "USD",
       "exchange": "NMS",
-      "price": 375.3,
-      "prevClose": 364.27,
-      "change": 11.03,
-      "changePct": 3.03,
+      "price": 376.16,
+      "prevClose": 375.3,
+      "change": 0.86,
+      "changePct": 0.23,
       "indicators": {
-        "K": 58.01,
-        "D": 47.31,
+        "K": 67.92,
+        "D": 54.18,
         "kdSignal": "hold",
-        "dif": 4.67,
-        "macd": 3.85,
-        "osc": 0.82,
+        "dif": 5.35,
+        "macd": 4.15,
+        "osc": 1.2,
         "macdSignal": "bullish",
-        "rsi6": 65.68,
-        "rsi12": 59.77,
-        "rsi24": 58.97,
-        "ma5": 364.09,
-        "ma20": 360.22,
-        "ma60": 359.03,
-        "ma120": 378,
+        "rsi6": 83.28,
+        "rsi12": 49.86,
+        "rsi24": 59.86,
+        "ma5": 368,
+        "ma20": 361.58,
+        "ma60": 358.97,
+        "ma120": 378.03,
         "maArrangement": "short_bull",
-        "bbUpper": 377.18,
-        "bbMid": 360.22,
-        "bbLower": 343.26,
+        "bbUpper": 379.07,
+        "bbMid": 361.58,
+        "bbLower": 344.1,
         "bbSignal": "upper_half",
-        "volRatio": 0.98,
-        "score": 69,
+        "volRatio": 0.18,
+        "score": 53,
         "history": {
           "closes": [
-            379.71,
             411.84,
             420.6,
             425.3,
@@ -534,10 +533,10 @@
             358.08,
             366.2,
             364.27,
-            375.3
+            375.3,
+            376.16
           ],
           "volumes": [
-            53434100,
             57645800,
             43385600,
             40127900,
@@ -596,10 +595,10 @@
             32177400,
             38924100,
             51922300,
-            36439300
+            36439300,
+            6696530
           ],
           "dates": [
-            "2026-06-26",
             "2026-06-29",
             "2026-06-30",
             "2026-07-01",
@@ -658,7 +657,8 @@
             "2026-09-16",
             "2026-09-17",
             "2026-09-18",
-            "2026-09-21"
+            "2026-09-21",
+            "2026-09-22"
           ]
         }
       }
@@ -667,32 +667,32 @@
   "market": {
     "^TWII": {
       "name": "台股 TAIEX",
-      "price": 47842.31,
+      "price": 47800.17,
       "prevClose": 47718.84,
-      "change": 123.47,
-      "changePct": 0.26
+      "change": 81.33,
+      "changePct": 0.17
     },
     "^GSPC": {
       "name": "S&P 500",
-      "price": 7764.7,
-      "prevClose": 7650.5,
-      "change": 114.2,
-      "changePct": 1.49
+      "price": 7771.86,
+      "prevClose": 7764.7,
+      "change": 7.16,
+      "changePct": 0.09
     },
     "^IXIC": {
       "name": "NASDAQ",
-      "price": 27122.09,
-      "prevClose": 26522.54,
-      "change": 599.55,
-      "changePct": 2.26
+      "price": 27216.3,
+      "prevClose": 27122.09,
+      "change": 94.21,
+      "changePct": 0.35
     },
     "^VIX": {
       "name": "VIX",
-      "price": 14.87,
-      "prevClose": 14.81,
-      "change": 0.06,
-      "changePct": 0.41
+      "price": 14.66,
+      "prevClose": 14.87,
+      "change": -0.21,
+      "changePct": -1.41
     }
   },
-  "updatedAt": "2026-09-22T05:46:58.445Z"
+  "updatedAt": "2026-09-22T14:05:57.731Z"
 }
