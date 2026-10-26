@@ -6,34 +6,33 @@
       "currency": "TWD",
       "exchange": "TAI",
       "price": 24.4,
-      "prevClose": 24.85,
-      "change": -0.45,
-      "changePct": -1.81,
+      "prevClose": 24.4,
+      "change": 0,
+      "changePct": 0,
       "indicators": {
-        "K": 15.07,
-        "D": 18.1,
+        "K": 13.89,
+        "D": 16.7,
         "kdSignal": "oversold",
-        "dif": -0.32,
-        "macd": -0.16,
-        "osc": -0.16,
+        "dif": -0.35,
+        "macd": -0.2,
+        "osc": -0.15,
         "macdSignal": "bearish",
-        "rsi6": 30.61,
-        "rsi12": 25.27,
-        "rsi24": 53.2,
-        "ma5": 24.68,
-        "ma20": 25.69,
-        "ma60": 25.68,
+        "rsi6": 44.12,
+        "rsi12": 23.6,
+        "rsi24": 50,
+        "ma5": 24.56,
+        "ma20": 25.62,
+        "ma60": 25.66,
         "ma120": 27.39,
-        "maArrangement": "neutral",
-        "bbUpper": 27.42,
-        "bbMid": 25.69,
-        "bbLower": 23.96,
+        "maArrangement": "bear",
+        "bbUpper": 27.44,
+        "bbMid": 25.62,
+        "bbLower": 23.8,
         "bbSignal": "lower_half",
-        "volRatio": 0.93,
-        "score": 42,
+        "volRatio": 0,
+        "score": 22,
         "history": {
           "closes": [
-            25.85,
             24.15,
             23.45,
             24.85,
@@ -92,10 +91,10 @@
             24.65,
             24.5,
             24.85,
+            24.4,
             24.4
           ],
           "volumes": [
-            4082167,
             7189300,
             4054372,
             3891220,
@@ -154,10 +153,10 @@
             1925156,
             1527200,
             1227509,
-            1721701
+            1721701,
+            0
           ],
           "dates": [
-            "2026-07-28",
             "2026-07-29",
             "2026-07-30",
             "2026-07-31",
@@ -216,7 +215,8 @@
             "2026-10-19",
             "2026-10-20",
             "2026-10-21",
-            "2026-10-22"
+            "2026-10-22",
+            "2026-10-23"
           ]
         }
       }
@@ -227,34 +227,33 @@
       "currency": "TWD",
       "exchange": "TAI",
       "price": 46.75,
-      "prevClose": 48.5,
-      "change": -1.75,
-      "changePct": -3.61,
+      "prevClose": 46.75,
+      "change": 0,
+      "changePct": 0,
       "indicators": {
-        "K": 21.66,
-        "D": 21.02,
-        "kdSignal": "hold",
-        "dif": -0.59,
-        "macd": -0.06,
-        "osc": -0.53,
+        "K": 20.82,
+        "D": 20.96,
+        "kdSignal": "sell",
+        "dif": -0.71,
+        "macd": -0.19,
+        "osc": -0.52,
         "macdSignal": "bearish",
-        "rsi6": 22.52,
-        "rsi12": 30.39,
-        "rsi24": 49.91,
-        "ma5": 47.45,
-        "ma20": 50.19,
-        "ma60": 48.71,
-        "ma120": 49.81,
+        "rsi6": 34.34,
+        "rsi12": 33.2,
+        "rsi24": 46.3,
+        "ma5": 47.15,
+        "ma20": 50.01,
+        "ma60": 48.74,
+        "ma120": 50,
         "maArrangement": "neutral",
-        "bbUpper": 54.43,
-        "bbMid": 50.19,
-        "bbLower": 45.96,
+        "bbUpper": 54.49,
+        "bbMid": 50.01,
+        "bbLower": 45.52,
         "bbSignal": "lower_half",
-        "volRatio": 1.16,
-        "score": 42,
+        "volRatio": 0,
+        "score": 27,
         "history": {
           "closes": [
-            45,
             41.8,
             41.4,
             45.5,
@@ -313,10 +312,10 @@
             46.95,
             46.8,
             48.5,
+            46.75,
             46.75
           ],
           "volumes": [
-            358787690,
             521050032,
             509192243,
             363361964,
@@ -375,10 +374,10 @@
             115584945,
             86798823,
             82525435,
-            122247681
+            122247681,
+            0
           ],
           "dates": [
-            "2026-07-28",
             "2026-07-29",
             "2026-07-30",
             "2026-07-31",
@@ -437,7 +436,8 @@
             "2026-10-19",
             "2026-10-20",
             "2026-10-21",
-            "2026-10-22"
+            "2026-10-22",
+            "2026-10-23"
           ]
         }
       }
@@ -447,32 +447,32 @@
       "name": "Tesla, Inc.",
       "currency": "USD",
       "exchange": "NMS",
-      "price": 371.54,
+      "price": 372.22,
       "prevClose": 374.58,
-      "change": -3.04,
-      "changePct": -0.81,
+      "change": -2.36,
+      "changePct": -0.63,
       "indicators": {
-        "K": 60.66,
-        "D": 57.25,
+        "K": 61.24,
+        "D": 57.44,
         "kdSignal": "hold",
-        "dif": 2.58,
-        "macd": 2.76,
-        "osc": -0.17,
+        "dif": 2.64,
+        "macd": 2.77,
+        "osc": -0.13,
         "macdSignal": "death_cross",
-        "rsi6": 58.36,
-        "rsi12": 46.32,
-        "rsi24": 48.74,
-        "ma5": 374.87,
-        "ma20": 369.83,
-        "ma60": 357.49,
-        "ma120": 377.56,
+        "rsi6": 59.1,
+        "rsi12": 46.69,
+        "rsi24": 48.96,
+        "ma5": 375.01,
+        "ma20": 369.87,
+        "ma60": 357.5,
+        "ma120": 377.57,
         "maArrangement": "short_bull",
-        "bbUpper": 390.21,
-        "bbMid": 369.83,
-        "bbLower": 349.46,
+        "bbUpper": 390.25,
+        "bbMid": 369.87,
+        "bbLower": 349.48,
         "bbSignal": "upper_half",
-        "volRatio": 0.24,
-        "score": 41,
+        "volRatio": 0.74,
+        "score": 46,
         "history": {
           "closes": [
             311.21,
@@ -534,7 +534,7 @@
             373.71,
             386.47,
             374.58,
-            371.54
+            372.22
           ],
           "volumes": [
             36630600,
@@ -595,8 +595,8 @@
             38817900,
             32123300,
             48875800,
-            51482700,
-            11088455
+            51610900,
+            34689700
           ],
           "dates": [
             "2026-07-31",
@@ -674,25 +674,25 @@
     },
     "^GSPC": {
       "name": "S&P 500",
-      "price": 7616.39,
+      "price": 7623.68,
       "prevClose": 7663.43,
-      "change": -47.04,
-      "changePct": -0.61
+      "change": -39.75,
+      "changePct": -0.52
     },
     "^IXIC": {
       "name": "NASDAQ",
-      "price": 25943.87,
+      "price": 25955.34,
       "prevClose": 26008.86,
-      "change": -64.99,
-      "changePct": -0.25
+      "change": -53.52,
+      "changePct": -0.21
     },
     "^VIX": {
       "name": "VIX",
-      "price": 19.88,
+      "price": 19.45,
       "prevClose": 19.03,
-      "change": 0.85,
-      "changePct": 4.47
+      "change": 0.42,
+      "changePct": 2.21
     }
   },
-  "updatedAt": "2026-10-23T14:19:23.186Z"
+  "updatedAt": "2026-10-26T05:42:50.820Z"
 }
